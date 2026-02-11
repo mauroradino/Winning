@@ -1,0 +1,18 @@
+{
+    "manchester city": {
+        "players":"https://www.transfermarkt.com.ar/manchester-city/kader/verein/281/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/manchester-city/transfers/verein/281/saison_id/",
+        "valuations": "https://www.transfermarkt.es/manchester-city/kader/verein/281/plus/0/galerie/0?saison_id="
+        },
+    "arsenal": {
+        "players": "https://www.transfermarkt.com.ar/arsenal/kader/verein/11/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/fc-arsenal/transfers/verein/11/saison_id/",
+        "valuations": "https://www.transfermarkt.es/arsenal-fc/kader/verein/11/plus/0/galerie/0?saison_id="
+
+    },
+    "boca juniors":{
+        "players": "https://www.transfermarkt.es/ca-boca-juniors/kader/verein/189/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/ca-boca-juniors/transfers/verein/189/saison_id/",
+        "valuations": "https://www.transfermarkt.es/ca-boca-juniors/kader/verein/189/plus/0/galerie/0?saison_id="
+    }
+}

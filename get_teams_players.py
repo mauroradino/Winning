@@ -40,14 +40,16 @@ def get_players(url: str):
                 numero = div_rn.text.strip() if div_rn else "N/A"
                 
                 td_nombre = item.find('td', class_='hauptlink')
-                nombre = td_nombre.find('a').text.strip() if td_nombre and td_nombre.find('a') else "N/A"
-                link_perfil = td_nombre.find('a')['href'] if td_nombre and td_nombre.find('a') else None
+                nombre_link = td_nombre.find('a') if td_nombre else None
+                nombre = nombre_link.text.strip() if nombre_link else "N/A"
+                link_perfil = nombre_link['href'] if nombre_link and nombre_link.get('href') else None
                 
                 inline_table = item.find('table', class_='inline-table')
                 all_inline_tds = inline_table.find_all('td') if inline_table else []
                 posicion = all_inline_tds[-1].get_text(strip=True) if all_inline_tds else "N/A"
                 tds_zentriert = item.find_all('td', class_='zentriert')
                 td_valor = item.find('td', class_='rechts hauptlink')
+                valor_num = 0  # Inicializar con valor por defecto
                 if td_valor and td_valor.find('a'):
                     raw_v = td_valor.find('a').get_text(strip=True).replace('€', '').replace(',', '.')
                     if 'mill' in raw_v:
@@ -64,10 +66,11 @@ def get_players(url: str):
                         fecha = partes[0]
                         edad = partes[1].replace(")", "")
                 
+                club_anterior = "N/A"  # Valor por defecto
                 if len(tds_zentriert) > 7:
-                    club_anterior = tds_zentriert[6].find('a')['title'].split(':')[0]
-                else:
-                    club_anterior = "hola"
+                    club_link = tds_zentriert[6].find('a')
+                    if club_link and club_link.get('title'):
+                        club_anterior = club_link['title'].split(':')[0]
                 pie = tds_zentriert[4].get_text(strip=True) if len(tds_zentriert) > 5 else "N/A"
                 
                 altura_raw = tds_zentriert[3].get_text(strip=True) if len(tds_zentriert) > 3 else "N/A"
@@ -87,7 +90,7 @@ def get_players(url: str):
                 nacionalidad = "N/A"
                 if len(tds_zentriert) > 2:
                     img_flag = tds_zentriert[2].find('img')
-                    if img_flag:
+                    if img_flag and img_flag.get('title'):
                         nacionalidad = img_flag['title']
 
                 players.append({

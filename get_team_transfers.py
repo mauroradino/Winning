@@ -33,29 +33,58 @@ def get_team_transfers(url: str, season: str):
             name = name_tag.get_text(strip=True) if name_tag else "N/A"
             tds = item.find_all('td')
             from_club = "N/A"
-            amount = tds[12].find('a').get_text(strip=True)
-            if amount:
-                clean_amount = amount.replace("€", "").replace(".", "").replace(",", ".").strip()
-                
-                try:
-                    if "mill" in clean_amount:
-                        val = float(clean_amount.split("mill")[0].strip())
-                        amount_numeric = int(val * 1000000)
-                    elif "mil" in clean_amount:
-                        val = float(clean_amount.split("mil")[0].strip())
-                        amount_numeric = int(val * 1000)
-                    elif "Libre" in amount or "coste" in amount:
+            amount_numeric = 0  # Valor por defecto
+            
+            # Verificar si existe tds[12] antes de acceder
+            if len(tds) > 12:
+                td_amount = tds[12]
+                # Primero verificar si existe la clase normaler-text
+                precio_sesion = td_amount.find('i', class_="normaler-text")
+                if precio_sesion:
+                    amount_text = precio_sesion.get_text(strip=True)
+                    clean_amount = amount_text.replace("€", "").replace(".", "").replace(",", ".").strip()
+                    try:
+                        if "mill" in clean_amount:
+                            val = float(clean_amount.split("mill")[0].strip())
+                            amount_numeric = int(val * 1000000)
+                        elif "mil" in clean_amount:
+                            val = float(clean_amount.split("mil")[0].strip())
+                            amount_numeric = int(val * 1000)
+                        elif "Libre" in amount_text or "coste" in amount_text:
+                            amount_numeric = "Libre / Cesión"
+                        else:
+                            amount_numeric = "Libre / Cesión"
+                    except (ValueError, IndexError):
                         amount_numeric = 0
-                    else:
-                        amount_numeric = "Libre / cesión"
-                except (ValueError, IndexError):
-                    amount_numeric = 0
+                else:
+                    # Si no existe normaler-text, buscar en el enlace
+                    amount_link = td_amount.find('a')
+                    if amount_link:
+                        amount = amount_link.get_text(strip=True)
+                        if amount:
+                            clean_amount = amount.replace("€", "").replace(".", "").replace(",", ".").strip()
+                            try:
+                                if "mill" in clean_amount:
+                                    val = float(clean_amount.split("mill")[0].strip())
+                                    amount_numeric = int(val * 1000000)
+                                elif "mil" in clean_amount:
+                                    val = float(clean_amount.split("mil")[0].strip())
+                                    amount_numeric = int(val * 1000)
+                                elif "Libre" in amount or "coste" in amount:
+                                    amount_numeric = "Libre / Cesión"
+                                else:
+                                    amount_numeric = "Libre / Cesión"
+                            except (ValueError, IndexError):
+                                amount_numeric = 0
 
-            if len(tds) > 2:
+            if len(tds) > 8:
                 bloque_club = tds[8]
                 club_link = bloque_club.find('a')
-                from_club = club_link["title"] if club_link else "N/A"
-            id = name_tag.find('a')['href'].split('/')[-1] if name_tag and name_tag.find('a') else "N/A"
+                if club_link and club_link.get('title'):
+                    from_club = club_link["title"]
+            
+            nombre_link = name_tag.find('a') if name_tag else None
+            id = nombre_link['href'].split('/')[-1] if nombre_link and nombre_link.get('href') else "N/A"
             tabla_altas.append({"player_id": id, "player_name": name, "from_club": from_club, "amount": amount_numeric})
 
         # --- PROCESAR BAJAS ---
@@ -64,28 +93,59 @@ def get_team_transfers(url: str, season: str):
             name_tag = item.find('td', class_='hauptlink')
             name = name_tag.get_text(strip=True) if name_tag else "N/A"
             tds = item.find_all('td')
-            if len(tds) > 2:
+            to_club = "N/A"
+            amount_numeric = 0  # Valor por defecto
+            
+            if len(tds) > 8:
                 bloque_club = tds[8]
                 club_link = bloque_club.find('a')
-                to_club = club_link["title"] if club_link else "N/A"
-                
-            amount = tds[12].find('a').get_text(strip=True)
-            if amount:
-                clean_amount = amount.replace("€", "").replace(".", "").replace(",", ".").strip()
-                
-                try:
-                    if "mill" in clean_amount:
-                        val = float(clean_amount.split("mill")[0].strip())
-                        amount_numeric = int(val * 1000000)
-                    elif "mil" in clean_amount:
-                        val = float(clean_amount.split("mil")[0].strip())
-                        amount_numeric = int(val * 1000)
-                    elif "Libre" in amount or "coste" in amount:
-                        amount_numeric = "Libre / Cesión"
-                except (ValueError, IndexError):
-                    amount_numeric = 0
-
-            id = name_tag.find('a')['href'].split('/')[-1] if name_tag and name_tag.find('a') else "N/A"
+                if club_link and club_link.get('title'):
+                    to_club = club_link["title"]
+            
+            # Verificar si existe tds[12] antes de acceder
+            if len(tds) > 12:
+                td_amount = tds[12]
+                # Primero verificar si existe la clase normaler-text
+                precio_sesion = td_amount.find('i', class_="normaler-text")
+                if precio_sesion:
+                    amount_text = precio_sesion.get_text(strip=True)
+                    clean_amount = amount_text.replace("€", "").replace(".", "").replace(",", ".").strip()
+                    try:
+                        if "mill" in clean_amount:
+                            val = float(clean_amount.split("mill")[0].strip())
+                            amount_numeric = int(val * 1000000)
+                        elif "mil" in clean_amount:
+                            val = float(clean_amount.split("mil")[0].strip())
+                            amount_numeric = int(val * 1000)
+                        elif "Libre" in amount_text or "coste" in amount_text:
+                            amount_numeric = "Libre / Cesión"
+                        else:
+                            amount_numeric = "Libre / Cesión"
+                    except (ValueError, IndexError):
+                        amount_numeric = 0
+                else:
+                    # Si no existe normaler-text, buscar en el enlace
+                    amount_link = td_amount.find('a')
+                    if amount_link:
+                        amount = amount_link.get_text(strip=True)
+                        if amount:
+                            clean_amount = amount.replace("€", "").replace(".", "").replace(",", ".").strip()
+                            try:
+                                if "mill" in clean_amount:
+                                    val = float(clean_amount.split("mill")[0].strip())
+                                    amount_numeric = int(val * 1000000)
+                                elif "mil" in clean_amount:
+                                    val = float(clean_amount.split("mil")[0].strip())
+                                    amount_numeric = int(val * 1000)
+                                elif "Libre" in amount or "coste" in amount:
+                                    amount_numeric = "Libre / Cesión"
+                                else:
+                                    amount_numeric = "Libre / Cesión"
+                            except (ValueError, IndexError):
+                                amount_numeric = 0
+            
+            nombre_link = name_tag.find('a') if name_tag else None
+            id = nombre_link['href'].split('/')[-1] if nombre_link and nombre_link.get('href') else "N/A"
             tabla_bajas.append({"player_id": id, "player name": name, "to_club": to_club, "amount": amount_numeric})
 
         return tabla_altas, tabla_bajas

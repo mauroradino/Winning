@@ -24,8 +24,6 @@ def team_data(club: str, temporada: str):
         df = pd.DataFrame(players)
         df.to_csv(f"{path}/{club}_{temporada}_players.csv", index=False, header=True, encoding="utf-8-sig")
         print(f"Datos de jugadores guardados en {path}")
-        
-        # CAMBIO AQUÍ: Usamos la función que recorre la lista
         total_valuations = get_all_team_valuations(players) 
         
         df_valuations = pd.DataFrame(total_valuations)

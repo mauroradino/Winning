@@ -1,21 +1,32 @@
 import requests
 import time
 from bs4 import BeautifulSoup
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
-# --- OPTIMIZACIÓN: Diccionario de Cache ---
-# Almacena { club_id: "Nombre del Club" } para evitar peticiones redundantes
 club_cache = {}
 
+# Modificamos get_session para que sea más resiliente
 def get_session():
     session = requests.Session()
+    # Definimos la política de reintentos
+    retry_strategy = Retry(
+        total=3, # Reintenta hasta 3 veces
+        backoff_factor=2, # Espera 2s, 4s, 8s entre intentos
+        status_forcelist=[429, 500, 502, 503, 504], # Reintenta si hay saturación
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("https://", adapter)
+    session.mount("http://", adapter)
+    
     session.headers.update({
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Accept-Language": "es-ES,es;q=0.9",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
         "Connection": "keep-alive"
     })
     return session
 
+# Usamos la nueva sesión
 session = get_session()
 
 def get_club_name_by_id(club_id):
@@ -50,7 +61,7 @@ def get_valuations(player_id, player_name):
     # La API es extremadamente rápida, no requiere la sesión pesada
     url = f"https://tmapi-alpha.transfermarkt.technology/player/{player_id}/market-value-history"
     try:
-        response = requests.get(url, timeout=10)
+        response = session.get(url, timeout=10)
         if response.status_code != 200:
             return []
         

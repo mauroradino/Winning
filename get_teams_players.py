@@ -47,26 +47,15 @@ def get_players(url: str):
                 all_inline_tds = inline_table.find_all('td') if inline_table else []
                 posicion = all_inline_tds[-1].get_text(strip=True) if all_inline_tds else "N/A"
                 tds_zentriert = item.find_all('td', class_='zentriert')
-                
-                link_detalles = item.find_all('td', class_='rechts hauptlink')
-                
-                valor_num = "N/A"
-                valor_fecha = "N/A"
-
-                for link_td in link_detalles:
-                    a_tag = link_td.find('a')
-                    if a_tag and 'href' in a_tag.attrs:
-                        detalles_url = a_tag['href']
-                        time.sleep(0.1)
-                        detalles_response = session.get(f"https://www.transfermarkt.es{detalles_url}")
-                        if detalles_response.status_code == 200:
-                            detalles_soup = BeautifulSoup(detalles_response.text, 'html.parser')
-                            wrapper = detalles_soup.find('a', class_='data-header__market-value-wrapper')
-                            if wrapper:
-                                valor_num = wrapper.get_text(strip=True).split('Última')[0].strip()
-                                date_p = wrapper.find('p', class_='data-header__last-update')
-                                valor_fecha = date_p.get_text(strip=True).replace('Última revisión:', '').strip() if date_p else "N/A"
-
+                td_valor = item.find('td', class_='rechts hauptlink')
+                if td_valor and td_valor.find('a'):
+                    raw_v = td_valor.find('a').get_text(strip=True).replace('€', '').replace(',', '.')
+                    if 'mill' in raw_v:
+                        val_str = raw_v.replace('mill.', '').replace('mill', '').strip()
+                        valor_num = int(float(val_str) * 1000000)
+                    elif 'mil' in raw_v:
+                        val_str = raw_v.replace('mil.', '').replace('mil', '').strip()
+                        valor_num = int(float(val_str) * 1000)
                 fecha, edad = "N/A", "N/A"
                 if len(tds_zentriert) > 1:
                     nacimiento_raw = tds_zentriert[1].get_text(strip=True)
@@ -75,26 +64,24 @@ def get_players(url: str):
                         fecha = partes[0]
                         edad = partes[1].replace(")", "")
                 
-                club_anterior = "N/A"
-                if len(tds_zentriert) > 6:
-                    club_escudo = tds_zentriert[6].find('img')
-                    if club_escudo:
-                        club_anterior = club_escudo['title'].split(':')[0]
-
-                pie = tds_zentriert[4].get_text(strip=True) if len(tds_zentriert) > 4 else "N/A"
+                if len(tds_zentriert) > 7:
+                    club_anterior = tds_zentriert[6].find('a')['title'].split(':')[0]
+                else:
+                    club_anterior = "hola"
+                pie = tds_zentriert[4].get_text(strip=True) if len(tds_zentriert) > 5 else "N/A"
                 
                 altura_raw = tds_zentriert[3].get_text(strip=True) if len(tds_zentriert) > 3 else "N/A"
-                
+                        
                 if altura_raw in ["indeterminado", "indeterminadom", "N/A"]:
-                    altura = 0.0
+                            altura_limpia = 0.0
                 elif 'm' in altura_raw:
                     altura_limpia = altura_raw.replace('m', '').replace(',', '.').strip()
                     try:
-                        altura = int(float(altura_limpia) * 100)
+                        altura_limpia = int(float(altura_limpia) * 100)
                     except ValueError:
-                        altura = 0.0
-                else:
-                    altura = 0.0
+                        altura_limpia = 0.0
+                else: 
+                    altura_limpia = altura_raw
 
 
                 nacionalidad = "N/A"
@@ -112,9 +99,8 @@ def get_players(url: str):
                     "fecha de nacimiento": fecha, 
                     "pie": pie,
                     "pais de orígen": nacionalidad,
-                    "altura": altura,
+                    "altura": altura_limpia,
                     "valor": valor_num,
-                    "ultima valoracion": valor_fecha,
                     "club anterior": club_anterior
                 })
                 
@@ -127,3 +113,5 @@ def get_players(url: str):
     else:
         print(f"Error de acceso: {response.status_code}")
         return []
+    
+#print(get_players("https://www.transfermarkt.es/ca-boca-juniors/kader/verein/189/plus/1/galerie/0?saison_id=2025"))

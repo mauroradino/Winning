@@ -71,7 +71,7 @@ export async function getPlayers(club, temporada) {
  * @returns {Promise<Object>} - Objeto con {altas: [], bajas: []}
  */
 export async function getTransfers(club, season) {
-  const url = "http://127.0.0.1:5000/api/transfers";
+  const url = "/api/transfers";
 
   const payload = {
     club,
@@ -108,7 +108,7 @@ export async function getTransfers(club, season) {
  * @returns {Promise<Array>} - Lista de valoraciones
  */
 export async function getValuations(club, season) {
-  const url = "http://127.0.0.1:5000/api/transfers";
+  const url = "/api/transfers";
 
   const payload = {
     club,
@@ -166,7 +166,7 @@ export async function getClubData(club, temporada) {
 
 // Usamos async para poder esperar la respuesta del servidor
 export async function getRevenue({ club, season, transfer_budget }) {
-  const url = "http://127.0.0.1:5000/api/transfers/revenue";
+  const url = "/api/transfers/revenue";
 
   const payload = {
     club,
@@ -198,7 +198,7 @@ export async function getRevenue({ club, season, transfer_budget }) {
 }
 
 export async function playerValuation({player, season, club}){
-  const url = "http://127.0.0.1:5000/api/valuations";
+  const url = "/api/valuations";
 
   const payload = {
     club,

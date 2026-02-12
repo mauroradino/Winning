@@ -16,9 +16,7 @@ DATA_PATH = BASE_DIR / "datasets"
 app = FastAPI(title="Winning Transfer Simulator API")
 
 
-class TransfersData(BaseModel):
-    club: str
-    season: str
+
 
 class RevenueRequest(BaseModel):
     club: str
@@ -61,6 +59,9 @@ async def get_squad(club: str, season: str):
     
     raise HTTPException(status_code=404, detail=f"Datos no encontrados en {file_path}")
 
+class TransfersData(BaseModel):
+    club: str
+    season: str
 @app.post("/api/transfers")
 def get_transfers(data: TransfersData):
     path_altas = DATA_PATH / data.club / data.season / f"{data.club}_{data.season}_altas.csv"

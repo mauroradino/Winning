@@ -1,0 +1,45 @@
+﻿player_id,número,nombre y apellido,posicion,edad,fecha de nacimiento,pie,pais de orígen,altura,valor,club anterior
+3465,1,Peter Schmeichel,Portero,39,18/11/1963,"1,96m",Dinamarca,,0,N/A
+3310,12,Nicky Weaver,Portero,24,02/03/1979,"1,91m",Inglaterra,,0,N/A
+3804,20,Carlo Nash,Portero,29,13/09/1973,"1,97m",Inglaterra,,0,N/A
+3466,32,Kevin Stuhr-Ellegaard,Portero,20,23/05/1983,indeterminadom,Dinamarca,,0,N/A
+4249,33,Tim Flowers,Portero,36,03/02/1967,"1,90m",Inglaterra,,0,N/A
+4190,35,Brian Murphy,Portero,20,07/05/1983,"1,85m",Irlanda,,0,N/A
+3803,2,David Sommeil,Defensa central,28,10/08/1974,"1,79m",Guadalupe,,0,N/A
+3319,4,Gerard Wiekens,Defensa central,30,25/02/1973,"1,81m",Países Bajos,,0,N/A
+3356,5,Sylvain Distin,Defensa central,25,16/12/1977,"1,92m",Francia,,0,N/A
+3805,16,Paul Ritchie,Defensa central,27,21/08/1975,"1,80m",Escocia,,0,N/A
+3807,22,Richard Dunne,Defensa central,23,21/09/1979,"1,88m",Irlanda,,0,N/A
+3138,24,Steve Howey,Defensa central,31,26/10/1971,"1,86m",Inglaterra,,0,N/A
+3808,25,Lucién Mettomo,Defensa central,26,19/04/1977,indeterminadom,Camerún,,0,N/A
+3302,27,Mikkel Bischoff,Defensa central,21,03/02/1982,"1,93m",Dinamarca,,0,N/A
+29974,30,Patrick McCarthy,Defensa central,20,31/05/1983,"1,85m",Irlanda,,0,N/A
+4082,34,Stephen Jordan,Defensa central,21,06/03/1982,"1,83m",Inglaterra,,0,N/A
+3355,38,Rhys Day,Defensa central,20,31/08/1982,"1,85m",Gales,,0,N/A
+3809,3,Niclas Jensen,Lateral izquierdo,28,17/08/1974,indeterminadom,Dinamarca,,0,N/A
+3227,19,Danny Tiatto,Lateral izquierdo,30,22/05/1973,"1,73m",Australia,,0,N/A
+107179,15,Alf-Inge Haaland,Lateral derecho,30,23/11/1972,"1,86m",Noruega,,0,N/A
+3806,17,Jihai Sun,Lateral derecho,25,30/09/1977,"1,83m",China,,0,N/A
+10379,28,Tyrone Loran,Lateral derecho,22,29/06/1981,"1,87m",Curazao,,0,N/A
+107083,31,Laurent Charvet,Lateral derecho,30,08/05/1973,"1,87m",Francia,,0,N/A
+3889,23,Marc-Vivien Foé,Pivote,28,01/05/1975,"1,88m",Camerún,,0,N/A
+3810,6,Kevin Horlock,Pivote,30,01/11/1972,"1,83m",Irlanda del Norte,,0,N/A
+3811,13,Christian Negouai,Pivote,25,20/01/1978,"1,94m",Martinica,,0,N/A
+3317,18,Jeff Whitley,Pivote,24,28/01/1979,"1,75m",Irlanda del Norte,,0,N/A
+12124,36,Glenn Whelan,Pivote,19,13/01/1984,"1,80m",Irlanda,,0,N/A
+54757,37,Terry Dunfield,Mediocentro,21,20/02/1982,"1,79m",Canadá,,0,N/A
+3292,41,Joey Barton,Mediocentro,20,02/09/1982,"1,80m",Inglaterra,,0,N/A
+3639,31,Djamel Belmadi,Interior derecho,27,25/03/1976,"1,72m",Argelia,,0,N/A
+7932,40,Chris Shuker,Interior derecho,21,09/05/1982,"1,65m",Inglaterra,,0,N/A
+3300,8,Ali Benarbia,Mediocentro ofensivo,34,08/10/1968,"1,71m",Argelia,,0,N/A
+3231,14,Eyal Berkovic,Mediocentro ofensivo,31,02/04/1972,"1,70m",Israel,,0,N/A
+22754,44,Karim Kerkar,Mediocentro ofensivo,26,03/01/1977,"1,74m",Argelia,,0,N/A
+3467,29,Shaun Wright-Phillips,Extremo derecho,21,25/10/1981,"1,66m",Inglaterra,,0,N/A
+3136,7,Darren Huckerby,Delantero centro,27,23/04/1976,"1,78m",Inglaterra,,0,N/A
+3230,9,Paulo Wanchope,Delantero centro,26,31/07/1976,"1,93m",Costa Rica,,0,N/A
+3353,10,Shaun Goater,Delantero centro,33,25/02/1970,"1,82m",Bermudas,,0,N/A
+4080,11,Jon Macken,Delantero centro,25,07/09/1977,"1,78m",Irlanda,,0,N/A
+3812,21,Matías Vuoso,Delantero centro,21,03/11/1981,"1,75m",México,,0,N/A
+3225,33,Robbie Fowler,Delantero centro,28,09/04/1975,"1,75m",Inglaterra,,0,N/A
+37766,33,Chris Killen,Delantero centro,21,08/10/1981,"1,83m",Nueva Zelanda,,0,N/A
+3226,39,Nicolas Anelka,Delantero centro,24,14/03/1979,"1,86m",Francia,,0,N/A

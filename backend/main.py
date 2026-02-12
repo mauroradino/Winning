@@ -4,7 +4,6 @@ import pandas as pd
 from get_teams_players import get_players
 from get_team_transfers import get_team_transfers
 from get_valuations import get_all_team_valuations
-import requests
 
 with open("urls.json", "r") as f:
     urls = json.load(f)

@@ -3,4 +3,4 @@ test.ipynb
 algoritmos.pseudo
 .venv
 __pycache__
-datasets
+.env

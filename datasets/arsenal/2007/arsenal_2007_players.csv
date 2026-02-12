@@ -1,0 +1,36 @@
+﻿player_id,número,nombre y apellido,posicion,edad,fecha de nacimiento,pie,pais de orígen,altura,valor,ultima valoracion,club anterior
+16621,24,Manuel Almunia,Portero,31,19/05/1977,Derecho,España,1.91,N/A,N/A,RC Celta de Vigo
+122,1,Jens Lehmann,Portero,38,10/11/1969,indeterminado,Alemania,0.0,N/A,N/A,inactivo
+29692,21,Lukasz Fabianski,Portero,23,18/04/1985,Derecho,Polonia,1.9,250mil €,09/12/2025,
+33781,-,Vito Mannone,Portero,20,02/03/1988,Derecho,Italia,1.88,N/A,N/A,Atalanta Primavera
+3202,5,Kolo Touré,Defensa central,27,19/03/1981,Derecho,Costa de Marfil,1.78,N/A,N/A,ASEC Mimosas
+3156,10,William Gallas,Defensa central,30,17/08/1977,Derecho,Francia,1.82,N/A,N/A,Chelsea FC
+4277,6,Philippe Senderos,Defensa central,23,14/02/1985,Derecho,Suiza,1.89,N/A,N/A,
+34561,20,Johan Djourou,Defensa central,21,18/01/1987,indeterminado,Suiza,0.0,N/A,N/A,FC Arsenal U18
+7449,22,Gaël Clichy,Lateral izquierdo,22,26/07/1985,Izquierdo,Francia,1.76,N/A,N/A,
+33783,30,Armand Traoré,Lateral izquierdo,18,08/10/1989,Izquierdo,Senegal,1.84,N/A,N/A,FC Arsenal U18
+44792,34,Kieran Gibbs,Lateral izquierdo,18,26/09/1989,Izquierdo,Inglaterra,1.81,N/A,N/A,FC Arsenal U18
+26764,3,Bacary Sagna,Lateral derecho,25,14/02/1983,Derecho,Francia,1.76,N/A,N/A,AJ Auxerre
+13058,27,Emmanuel Eboué,Lateral derecho,25,04/06/1983,Derecho,Costa de Marfil,1.78,N/A,N/A,KSK Beveren (-2010)
+7335,31,Justin Hoyte,Lateral derecho,23,20/11/1984,Derecho,Trinidad y Tobago,1.78,N/A,N/A,FC Arsenal U18
+34562,25,Kerrea Gilbert,Lateral derecho,21,28/02/1987,Derecho,Inglaterra,1.75,N/A,N/A,FC Arsenal U18
+44793,-,Gavin Hoyte,Lateral derecho,18,06/06/1990,Derecho,Trinidad y Tobago,1.8,N/A,N/A,FC Arsenal U18
+17396,16,Mathieu Flamini,Pivote,24,07/03/1984,Derecho,Francia,1.78,N/A,N/A,AC Milan
+23914,-,Lassana Diarra,Pivote,23,10/03/1985,Derecho,Francia,1.73,N/A,N/A,Chelsea FC
+3194,19,Gilberto Silva,Pivote,31,07/10/1976,Derecho,Brasil,1.85,N/A,N/A,Clube Atlético Mineiro
+42352,15,Denílson,Pivote,20,16/02/1988,Derecho,Brasil,1.78,N/A,N/A,São Paulo FC
+42234,-,Håvard Nordtveit,Pivote,18,21/06/1990,Derecho,Noruega,1.88,N/A,N/A,N/A
+27394,17,Alex Song,Pivote,20,09/09/1987,Derecho,Camerún,1.85,N/A,N/A,
+8806,4,Cesc Fàbregas,Mediocentro,21,04/05/1987,Derecho,España,1.79,N/A,N/A,FC Arsenal U18
+26763,2,Abou Diaby,Mediocentro,22,11/05/1986,Derecho,Francia,1.91,N/A,N/A,AJ Auxerre
+42920,-,Fran Mérida,Mediocentro,18,04/03/1990,Izquierdo,España,1.73,N/A,N/A,FC Arsenal U18
+44799,36,Mark Randall,Mediocentro,18,28/09/1989,Derecho,Inglaterra,1.83,75mil €,29/12/2025,FC Arsenal U18
+44794,-,Henri Lansbury,Mediocentro,17,12/10/1990,Derecho,Inglaterra,1.83,N/A,N/A,FC Arsenal U18
+597,13,Aleksandr Hleb,Mediocentro ofensivo,27,01/05/1981,indeterminado,Bielorrusia,0.0,N/A,N/A,
+132,7,Tomas Rosicky,Mediocentro ofensivo,27,04/10/1980,Ambidiestro,República Checa,1.79,N/A,N/A,Borussia Dortmund
+44787,-,Nacer Barazite,Mediocentro ofensivo,18,27/05/1990,Derecho,Países Bajos,1.88,N/A,N/A,FC Arsenal U18
+33713,32,Theo Walcott,Extremo derecho,19,16/03/1989,Ambidiestro,Inglaterra,1.75,N/A,N/A,Southampton FC
+8883,25,Emmanuel Adebayor,Delantero centro,24,26/02/1984,Derecho,Togo,1.92,N/A,N/A,
+4380,11,Robin van Persie,Delantero centro,24,06/08/1983,Izquierdo,Países Bajos,1.83,N/A,N/A,
+24633,9,Eduardo,Delantero centro,25,25/02/1983,Izquierdo,Croacia,1.77,N/A,N/A,GNK Dinamo Zagreb
+34557,26,Nicklas Bendtner,Delantero centro,20,16/01/1988,indeterminado,Dinamarca,0.0,N/A,N/A,FC Arsenal Reserves

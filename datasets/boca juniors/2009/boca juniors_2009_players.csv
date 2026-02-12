@@ -1,0 +1,46 @@
+﻿player_id,número,nombre y apellido,posicion,edad,fecha de nacimiento,pie,pais de orígen,altura,valor,ultima valoracion,club anterior
+19937,1,Roberto Abbondanzieri,Portero,37,19/08/1972,"1,86m",Argentina,0.0,N/A,N/A,N/A
+7966,12,Javier García,Portero,23,29/01/1987,"1,80m",Argentina,0.0,25mil €,17/12/2025,N/A
+55955,31,Josué Ayala,Portero,22,30/05/1988,"1,84m",Argentina,0.0,N/A,N/A,N/A
+53332,-,Juan Forlín,Defensa central,22,10/01/1988,"1,80m",Argentina,0.0,N/A,N/A,N/A
+60889,8,Gary Medel,Defensa central,22,03/08/1987,"1,71m",Chile,0.0,50mil €,10/12/2025,N/A
+30767,29,Gabriel Paletta,Defensa central,24,15/02/1986,"1,90m",Italia,0.0,N/A,N/A,N/A
+61546,-,Facundo Roncaglia,Defensa central,23,10/02/1987,"1,79m",Argentina,0.0,25mil €,17/12/2025,N/A
+18733,-,Julio Cáceres,Defensa central,30,05/10/1979,"1,81m",Paraguay,0.0,N/A,N/A,N/A
+75127,6,Ezequiel Muñoz,Defensa central,19,08/10/1990,"1,85m",Argentina,0.0,75mil €,17/12/2025,N/A
+96740,26,Gastón Sauro,Defensa central,20,23/02/1990,"1,89m",Argentina,0.0,N/A,N/A,N/A
+23193,-,Luiz Alberto,Defensa central,32,01/12/1977,"1,86m",Brasil,0.0,N/A,N/A,N/A
+51354,30,Julio Barroso,Defensa central,25,16/01/1985,"1,75m",Argentina,0.0,N/A,N/A,N/A
+74405,37,Bréyner Bonilla,Defensa central,23,21/07/1986,"1,88m",Colombia,0.0,N/A,N/A,N/A
+113126,-,David Achucarro,Defensa central,19,05/01/1991,"1,80m",Argentina,0.0,10mil €,26/11/2025,N/A
+146292,-,Alan Pérez,Defensa central,19,20/04/1991,"1,83m",Argentina,0.0,125mil €,06/11/2025,N/A
+67084,18,Fabián Monzón,Lateral izquierdo,23,13/04/1987,"1,83m",Argentina,0.0,N/A,N/A,N/A
+7924,3,Claudio Morel Rodríguez,Lateral izquierdo,32,02/02/1978,"1,75m",Paraguay,0.0,N/A,N/A,N/A
+20132,20,Juan Krupoviesa,Lateral izquierdo,31,16/04/1979,"1,78m",Argentina,0.0,N/A,N/A,N/A
+116277,-,Nicolás Colazo,Lateral izquierdo,19,08/07/1990,"1,78m",Argentina,0.0,50mil €,17/12/2025,N/A
+110283,-,Leandro Aguirre,Lateral izquierdo,21,08/02/1989,"1,67m",Argentina,0.0,50mil €,17/10/2025,N/A
+6985,4,Hugo Ibarra,Lateral derecho,36,01/04/1974,"1,71m",Argentina,0.0,N/A,N/A,N/A
+76699,24,Adrián Gunino,Lateral derecho,21,03/02/1989,"1,72m",Uruguay,0.0,N/A,N/A,N/A
+19951,-,José Calvo,Lateral derecho,28,15/07/1981,"1,76m",Argentina,0.0,N/A,N/A,N/A
+113132,-,Leandro Marín,Lateral derecho,18,22/01/1992,"1,84m",Argentina,0.0,N/A,N/A,N/A
+15646,5,Sebastián Battaglia,Pivote,29,08/11/1980,"1,80m",Argentina,0.0,N/A,N/A,N/A
+61504,13,Sebastián Prediger,Pivote,23,04/09/1986,"1,83m",Argentina,0.0,N/A,N/A,N/A
+26471,19,Ariel Rosada,Pivote,32,11/04/1978,"1,81m",Argentina,0.0,N/A,N/A,N/A
+118283,22,Cristian Erbes,Pivote,20,06/01/1990,"1,73m",Argentina,0.0,N/A,N/A,N/A
+68743,-,Exequiel Benavídez,Pivote,21,05/03/1989,"1,79m",Argentina,0.0,N/A,N/A,N/A
+45328,36,Santiago Villafañe,Pivote,22,19/05/1988,"1,78m",Argentina,0.0,N/A,N/A,N/A
+26247,34,Jesús Méndez,Mediocentro,25,01/08/1984,"1,79m",Argentina,0.0,N/A,N/A,N/A
+26465,16,Guillermo Marino,Mediocentro,29,02/02/1981,"1,78m",Argentina,0.0,N/A,N/A,N/A
+53110,17,Matías Giménez,Interior izquierdo,25,23/12/1984,"1,81m",Argentina,0.0,N/A,N/A,N/A
+3854,10,Juan Román Riquelme,Mediocentro ofensivo,32,24/06/1978,"1,82m",Argentina,0.0,N/A,N/A,N/A
+75442,28,Nico Gaitán,Mediocentro ofensivo,22,23/02/1988,"1,74m",Argentina,0.0,N/A,N/A,N/A
+4193,11,Federico Insúa,Mediocentro ofensivo,30,03/01/1980,"1,80m",Argentina,0.0,N/A,N/A,N/A
+68746,21,Cristian Chávez,Mediocentro ofensivo,24,16/06/1986,"1,69m",Argentina,0.0,25mil €,11/12/2025,N/A
+74688,-,Ricardo Noir,Mediocentro ofensivo,23,26/02/1987,"1,76m",Argentina,0.0,N/A,N/A,N/A
+17872,7,Pablo Mouche,Extremo izquierdo,22,11/10/1987,"1,77m",Argentina,0.0,N/A,N/A,N/A
+142463,-,Orlando Gaona Lugo,Extremo derecho,19,25/07/1990,"1,78m",Paraguay,0.0,50mil €,02/12/2025,N/A
+3412,9,Martín Palermo,Delantero centro,36,07/11/1973,"1,88m",Argentina,0.0,N/A,N/A,N/A
+74693,27,Lucas Viatri,Delantero centro,23,29/03/1987,"1,85m",Argentina,0.0,N/A,N/A,N/A
+52907,-,Marcos Mondaini,Delantero centro,25,14/02/1985,"1,77m",Argentina,0.0,N/A,N/A,N/A
+59596,-,Lucas Pratto,Delantero centro,22,04/06/1988,"1,86m",Argentina,0.0,100mil €,17/12/2025,N/A
+110366,-,Sergio Araujo,Delantero centro,18,28/01/1992,"1,80m",Argentina,0.0,200mil €,02/12/2025,N/A

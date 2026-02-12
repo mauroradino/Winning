@@ -15,6 +15,21 @@ DATA_PATH = BASE_DIR / "datasets"
 
 app = FastAPI(title="Winning Transfer Simulator API")
 
+
+class TransfersData(BaseModel):
+    club: str
+    season: str
+
+class RevenueRequest(BaseModel):
+    club: str
+    season: str
+    transfer_budget: float
+
+class PlayerValuationRequest(BaseModel):
+    club: str
+    season: str
+    player: str
+
 # Configuración de CORS
 origins = [
     "http://localhost:5173",

@@ -34,7 +34,7 @@ class PlayerValuationRequest(BaseModel):
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://winning-tu-usuario.vercel.app" # Agrega aquí tu URL de Vercel cuando la tengas
+    "https://winning-alpha.vercel.app/" 
 ]
 
 app.add_middleware(

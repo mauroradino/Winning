@@ -163,8 +163,33 @@ export async function getClubData(club, temporada) {
   }
 }
 
+export async function getPlayerInfo({ nombre, club, season }){
+  const url = "/api/playerInfo"
+  const payload = { name: nombre, club, season }
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-// Usamos async para poder esperar la respuesta del servidor
+    if (!response.ok) {
+      throw new Error(`Error en la API: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log("Resultado de simulación:", result);
+
+    return result; // Ahora sí retornamos la respuesta del servidor
+  } catch (error) {
+    console.error("Error calculando ganancia:", error);
+    return null;
+  }
+}
+
+
 export async function getRevenue({ club, season, transfer_budget }) {
   const url = "/api/transfers/revenue";
 

@@ -13,7 +13,7 @@ function SalesTable({ players = [] }) {
           <thead className="bg-[#0b1120] text-gray-400 text-xs uppercase tracking-wide">
             <tr>
               <th className="px-4 py-3">Jugador</th>
-              <th className="px-4 py-3">Posición</th>
+              <th className="px-4 py-3">Club</th>
               <th className="px-4 py-3 text-right">Valor</th>
             </tr>
           </thead>
@@ -30,19 +30,18 @@ function SalesTable({ players = [] }) {
             ) : (
               players.map((p) => {
                 const rawValue = p.valor ?? p.amount;
-                // Validamos que sea un número real y mayor a cero
                 const hasValue = rawValue !== null && rawValue !== undefined && !isNaN(Number(rawValue)) && Number(rawValue) > 0;
 
                 return (
                   <tr
                     key={p.player_id || p.nombre}
-                    className="border-t border-[#111827] hover:bg-[#020617]"
+                    className="border-t border-[#111827] hover:bg-[#0a0e1f] hover:cursor-pointer"
                   >
                     <td className="px-4 py-3 text-gray-100">
                       {p['nombre y apellido'] || p.player_name || p['player name']}
                     </td>
                     <td className="px-4 py-3 text-gray-300">
-                      {p.posicion || p.from_club || '-'}
+                      {p.posicion || p.to_club || '-'}
                     </td>
                     <td className="px-4 py-3 text-right">
                       {hasValue ? (
@@ -52,7 +51,7 @@ function SalesTable({ players = [] }) {
                           }).format(rawValue)}
                         </span>
                       ) : (
-                        <span className="text-red-500/80 font-medium italic">
+                        <span className="text-red-500/80 font-medium">
                           Libre / Cesión
                         </span>
                       )}

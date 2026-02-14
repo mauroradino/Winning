@@ -1,4 +1,4 @@
-const INTERNAL_API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const INTERNAL_API_BASE_URL = '/api';
 
 /**
  * Función genérica para llamar a la API
@@ -9,7 +9,7 @@ const INTERNAL_API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 export async function callApi(endpoint, options = {}) {
   try {
     const url = `${INTERNAL_API_BASE_URL}${endpoint}`;
-    
+    console.log("URL ", url)
     const defaultOptions = {
       method: 'GET',
       headers: {
@@ -55,7 +55,6 @@ export async function callApi(endpoint, options = {}) {
  * @returns {Promise<Array>} - Lista de jugadores
  */
 export async function getPlayers(club, temporada) {
-  // Usa el endpoint /api/squad/{club}/{season} que devuelve { status, source, data: [...] }
   const response = await callApi(
     `/squad/${encodeURIComponent(club)}/${encodeURIComponent(temporada)}`
   )
@@ -74,7 +73,6 @@ export async function getTransfers(club, season) {
       method: "POST",
       body: { club, season },
     });
-
     console.log("Transferencias (altas/bajas):", result);
     return result || { altas: [], bajas: [] };
   } catch (error) {
@@ -168,7 +166,6 @@ export async function playerValuation({ player, season, club }) {
   }
 }
 
-// Lanza la ingesta de embeddings para un club y temporada (acción de admin)
 export async function launchIngestion({ club, season }) {
   try {
     const result = await callApi(

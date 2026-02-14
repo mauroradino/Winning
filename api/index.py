@@ -19,7 +19,7 @@ if str(BASE_DIR) not in sys.path:
     sys.path.append(str(BASE_DIR))
 
 #from ia.pinecone_test import ingest_data, query_rag, get_player_current_club
-from ia.embeddings import ingest_data, query_rag, get_player_current_club
+#from ia.embeddings import ingest_data, query_rag, get_player_current_club
 app = FastAPI(title="Winning Transfer Simulator API")
 
 
@@ -157,11 +157,11 @@ def normalize(text: str) -> str:
     return without_accents.lower()
 
 # Endpoint para lanzar la ingesta de datos en segundo plano
-@app.post("/api/ingest/{club}/{season}")
+""" @app.post("/api/ingest/{club}/{season}")
 async def ingest_club_data(club: str, season: str, background_tasks: BackgroundTasks):
     background_tasks.add_task(ingest_data, club, season)
     return {"message": f"Ingesta lanzada para {club} {season}"}
-
+ """
 class AgentMessage(BaseModel):
     from_role: str
     text: str
@@ -172,13 +172,11 @@ class AgentRequest(BaseModel):
     history: list[AgentMessage] | None = None
 
 
-@app.post("/api/agent")
+""" @app.post("/api/agent")
 async def query_agent(req: AgentRequest):
-    """
     Endpoint principal del agente.
     - Tiene memoria breve (history) que se usa como parte de la pregunta.
     - Para preguntas del tipo '¿en qué club juega X?' usa lógica determinística con las valuaciones.
-    """
     question = req.question.strip()
     q_lower = question.lower()
 
@@ -213,7 +211,7 @@ async def query_agent(req: AgentRequest):
 
     answer = query_rag(full_question)
     return {"answer": answer}
-
+ """
 
 @app.get("/api/simulate")
 async def simulate_strategy(club: str, season: str, transfer_budget: float, salary_budget: float):

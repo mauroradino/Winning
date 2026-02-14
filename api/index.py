@@ -18,6 +18,7 @@ DATA_PATH = BASE_DIR / "datasets"
 if str(BASE_DIR) not in sys.path:
     sys.path.append(str(BASE_DIR))
 
+#from ia.pinecone_test import ingest_data, query_rag, get_player_current_club
 from ia.embeddings import ingest_data, query_rag, get_player_current_club
 app = FastAPI(title="Winning Transfer Simulator API")
 
@@ -36,8 +37,8 @@ class PlayerValuationRequest(BaseModel):
 
 # Configuración de CORS
 origins = [
-    "http://localhost:5000",
-    "http://127.0.0.1:5000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
     "https://winning-alpha.vercel.app/" 
 ]
 

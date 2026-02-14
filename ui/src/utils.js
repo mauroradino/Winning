@@ -1,4 +1,4 @@
-const INTERNAL_API_BASE_URL = '/api';
+const INTERNAL_API_BASE_URL = 'https://winning-black.vercel.app/api';
 
 /**
  * Función genérica para llamar a la API
@@ -9,14 +9,13 @@ const INTERNAL_API_BASE_URL = '/api';
 export async function callApi(endpoint, options = {}) {
   try {
     const url = `${INTERNAL_API_BASE_URL}${endpoint}`;
-    console.log("URL ", url)
     const defaultOptions = {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     };
-
+    
     const config = {
       ...defaultOptions,
       ...options,
@@ -25,11 +24,12 @@ export async function callApi(endpoint, options = {}) {
         ...options.headers,
       },
     };
-
+    
     if (config.body && typeof config.body === 'object') {
       config.body = JSON.stringify(config.body);
     }
-
+    
+    console.log("URL ", url)
     const respuesta = await fetch(url, config);
     
     if (!respuesta.ok) {

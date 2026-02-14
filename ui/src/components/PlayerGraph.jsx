@@ -14,7 +14,6 @@ function PlayerGraph({ valuations, player }) {
     const labels = valuations.map((v) => v.valuation_date)
     const data = valuations.map((v) => v.valuation_amount)
 
-    // Destruir gráfico previo si existe
     if (chartRef.current) {
       chartRef.current.destroy()
     }
@@ -28,7 +27,7 @@ function PlayerGraph({ valuations, player }) {
             label: `Precio de ${player || 'jugador'}`,
             data,
             borderWidth: 2,
-            borderColor: 'rgba(74, 222, 128, 1)', // verde tailwind
+            borderColor: 'rgba(74, 222, 128, 1)', 
             backgroundColor: 'rgba(74, 222, 128, 0.15)',
             pointBackgroundColor: 'rgba(74, 222, 128, 1)',
             pointBorderColor: '#020617',

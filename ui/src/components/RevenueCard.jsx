@@ -1,4 +1,4 @@
-function RevenueCard({ presupuesto, ganancia, restante }) {
+function RevenueCard({ presupuesto, ganancia, restante, gasto, ingreso }) {
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('es-AR', {
       maximumFractionDigits: 0,
@@ -9,7 +9,6 @@ function RevenueCard({ presupuesto, ganancia, restante }) {
 
   return (
     <div className="flex flex-col gap-4 text-sm text-gray-200">
-      {/* Título */}
       {/* Presupuesto inicial */}
       <div className="flex items-center justify-between">
         <span className="text-xs uppercase tracking-wide text-gray-400">
@@ -20,20 +19,25 @@ function RevenueCard({ presupuesto, ganancia, restante }) {
         </span>
       </div>
 
-      {/* Ganancia */}
+      {/* Gasto en transferencias */}
       <div className="flex items-center justify-between">
         <span className="text-xs uppercase tracking-wide text-gray-400">
-          Ganancia
+          Gasto en transferencias
         </span>
-        <span
-          className={`text-lg font-semibold ${
-            ganancia >= 0 ? 'text-emerald-400' : 'text-red-400'
-          }`}
-        >
-          {ganancia >= 0 ? '+' : '-'}${formatCurrency(Math.abs(ganancia))}
+        <span className="text-lg font-semibold text-red-400">
+          -${formatCurrency(Math.abs(gasto || 0))}
         </span>
       </div>
 
+      {/* Ingreso por ventas */}
+      <div className="flex items-center justify-between">
+        <span className="text-xs uppercase tracking-wide text-gray-400">
+          Ingreso por ventas
+        </span>
+        <span className="text-lg font-semibold text-emerald-400">
+          +${formatCurrency(Math.abs(ingreso || 0))}
+        </span>
+      </div>
       {/* Presupuesto restante */}
       <div className="flex items-center justify-between border-t border-[#1f2937] pt-3 mt-1">
         <span className="text-xs uppercase tracking-wide text-gray-400">

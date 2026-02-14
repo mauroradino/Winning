@@ -1,3 +1,4 @@
+const INTERNAL_API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 /**
  * Función genérica para llamar a la API
@@ -7,7 +8,7 @@
  */
 export async function callApi(endpoint, options = {}) {
   try {
-    const url = `${API_BASE_URL}${endpoint}`;
+    const url = `${INTERNAL_API_BASE_URL}${endpoint}`;
     
     const defaultOptions = {
       method: 'GET',
@@ -25,7 +26,6 @@ export async function callApi(endpoint, options = {}) {
       },
     };
 
-    // Si hay body, convertirlo a JSON
     if (config.body && typeof config.body === 'object') {
       config.body = JSON.stringify(config.body);
     }
@@ -44,7 +44,7 @@ export async function callApi(endpoint, options = {}) {
     
   } catch (error) {
     console.error("Hubo un problema con la petición:", error);
-    throw error; // Re-lanzar el error para que el componente pueda manejarlo
+    throw error;
   }
 }
 
@@ -63,78 +63,27 @@ export async function getPlayers(club, temporada) {
 }
 
 /**
- * Obtiene las transferencias (altas y bajas) de un club y temporada
- * @param {string} club - Nombre del club
- * @param {string} temporada - Año de la temporada
- * @returns {Promise<Object>} - Objeto con {altas: [], bajas: []}
- */
+* Obtiene las transferencias (altas y bajas) de un club y temporada
+* @param {string} club - Nombre del club
+* @param {string} season - Año de la temporada
+* @returns {Promise<Object>} - Objeto con {altas: [], bajas: []}
+*/
 export async function getTransfers(club, season) {
-  const url = "/api/transfers";
-
-  const payload = {
-    club,
-    season,
-  };
-
   try {
-    const response = await fetch(url, {
+    const result = await callApi("/transfers", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+      body: { club, season },
     });
 
-    if (!response.ok) {
-      throw new Error(`Error en la API: ${response.status}`);
-    }
-
-    const result = await response.json();
     console.log("Transferencias (altas/bajas):", result);
-
-    return result; // { altas: [], bajas: [] }
+    return result || { altas: [], bajas: [] };
   } catch (error) {
     console.error("Error obteniendo transferencias:", error);
     return { altas: [], bajas: [] };
   }
 }
 
-/**
- * Obtiene las valoraciones de los jugadores de un club y temporada
- * @param {string} club - Nombre del club
- * @param {string} temporada - Año de la temporada
- * @returns {Promise<Array>} - Lista de valoraciones
- */
-export async function getValuations(club, season) {
-  const url = "/api/transfers";
 
-  const payload = {
-    club,
-    season,
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error en la API: ${response.status}`);
-    }
-
-    const result = await response.json();
-    console.log("Resultado de simulación:", result);
-
-    return result; // Ahora sí retornamos la respuesta del servidor
-  } catch (error) {
-    console.error("Error calculando ganancia:", error);
-    return null;
-  }
-}
 
 /**
  * Obtiene todos los datos de un club (jugadores, transferencias y valoraciones)
@@ -147,9 +96,7 @@ export async function getClubData(club, temporada) {
     const [players, transfers, valuations] = await Promise.all([
       getPlayers(club, temporada),
       getTransfers(club, temporada),
-      getValuations(club, temporada),
     ]);
-
     return {
       players,
       transfers,
@@ -161,36 +108,25 @@ export async function getClubData(club, temporada) {
   }
 }
 
-export async function getPlayerInfo({ nombre, club, season }){
-  const url = "/api/playerInfo"
-  const payload = { name: nombre, club, season }
+export async function getPlayerInfo({ nombre, club, season }) {
+  const payload = { name: nombre, club, season };
+
   try {
-    const response = await fetch(url, {
+    const result = await callApi("/playerInfo", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+      body: payload,
     });
 
-    if (!response.ok) {
-      throw new Error(`Error en la API: ${response.status}`);
-    }
-
-    const result = await response.json();
-    console.log("Resultado de simulación:", result);
-
-    return result; // Ahora sí retornamos la respuesta del servidor
+    console.log("Info de jugador:", result);
+    return result; 
   } catch (error) {
-    console.error("Error calculando ganancia:", error);
+    console.error("Error obteniendo info del jugador:", error);
     return null;
   }
 }
 
 
 export async function getRevenue({ club, season, transfer_budget }) {
-  const url = "/api/transfers/revenue";
-
   const payload = {
     club,
     season,
@@ -198,31 +134,20 @@ export async function getRevenue({ club, season, transfer_budget }) {
   };
 
   try {
-    const response = await fetch(url, {
+    const result = await callApi("/transfers/revenue", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+      body: payload,
     });
 
-    if (!response.ok) {
-      throw new Error(`Error en la API: ${response.status}`);
-    }
-
-    const result = await response.json();
     console.log("Resultado de simulación:", result);
-
-    return result; // Ahora sí retornamos la respuesta del servidor
+    return result;
   } catch (error) {
     console.error("Error calculando ganancia:", error);
     return null;
   }
 }
 
-export async function playerValuation({player, season, club}){
-  const url = "/api/valuations";
-
+export async function playerValuation({ player, season, club }) {
   const payload = {
     club,
     season,
@@ -230,29 +155,33 @@ export async function playerValuation({player, season, club}){
   };
 
   try {
-    const response = await fetch(url, {
+    const result = await callApi("/valuations", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+      body: payload,
     });
 
-    if (!response.ok) {
-      throw new Error(`Error en la API: ${response.status}`);
-    }
-
-    const result = await response.json();
-    console.log("Resultado de simulación:", result);
-
-    return result; 
+    console.log("Historial de valoraciones:", result);
+    return result;
   } catch (error) {
-    console.error("Error calculando ganancia:", error);
+    console.error("Error obteniendo valoraciones:", error);
     return null;
   }
 }
 
-
+// Lanza la ingesta de embeddings para un club y temporada (acción de admin)
+export async function launchIngestion({ club, season }) {
+  try {
+    const result = await callApi(
+      `/ingest/${encodeURIComponent(club)}/${encodeURIComponent(season)}`,
+      { method: 'POST' },
+    );
+    console.log('Ingesta lanzada:', result);
+    return result;
+  } catch (error) {
+    console.error('Error lanzando ingesta:', error);
+    throw error;
+  }
+}
 /**
  * Obtiene la lista de clubes disponibles
  * @returns {Promise<Array>} - Lista de clubes disponibles
@@ -261,3 +190,26 @@ export async function getAvailableClubs() {
   return callApi('/clubs');
 }
 
+
+
+export async function queryAgent(question, history = []) {
+  try {
+    const payload = {
+      question,
+      history: history.map((m) => ({
+        from_role: m.from,
+        text: m.text,
+      })),
+    }
+
+    const result = await callApi('/agent', {
+      method: 'POST',
+      body: payload,
+    })
+
+    return result
+  } catch (error) {
+    console.error('Error consultando al agente:', error)
+    throw error
+  }
+}

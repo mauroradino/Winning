@@ -3,28 +3,30 @@ import './App.css'
 import {
   getPlayers,
   getTransfers,
-  getValuations,
   getClubData,
-  getAvailableClubs,
   getRevenue,
   playerValuation,
+  launchIngestion,
 } from './utils'
 import RevenueCard from './components/RevenueCard'
 import PlayerGraph from './components/PlayerGraph'
 import PurchaseTable from './components/PurchaseTable'
 import SalesTable from './components/SalesTable'
-
+import PlayersTable from './components/PlayersTable'
 function HomePage() {
   const [club, setClub] = useState('Boca Juniors')
-  const [temporada, setTemporada] = useState('2025/26')
+  const [temporada, setTemporada] = useState('2025')
   const [presupuestoFichajes, setPresupuestoFichajes] = useState(0)
   const [presupuestoSalarios, setPresupuestoSalarios] = useState(0)
   const [player, setPlayer] = useState('')
   const [revenue, setRevenue] = useState(0)
   const [restante, setRestante] = useState(0)
+  const [gasto, setGasto] = useState(0)
+  const [ingreso, setIngreso] = useState(0)
   const [valuations, setValuations] = useState([])
-  const [purchasedPlayers, setPurchasedPlayers] = useState([])
-  const [soldPlayers, setSoldPlayers] = useState([])
+  const [squadPlayers, setSquadPlayers] = useState([])       // Plantel completo
+  const [purchasedPlayers, setPurchasedPlayers] = useState([]) // Altas
+  const [soldPlayers, setSoldPlayers] = useState([])           // Bajas
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [data, setData] = useState(null)
@@ -33,8 +35,11 @@ function HomePage() {
     setLoading(true)
     setError(null)
     try {
-      const playersResp = await getPlayers(club.toLowerCase(), temporada.slice(0, 4))
-      setPurchasedPlayers(playersResp || [])
+      const playersResp = await getPlayers(
+        club.toLowerCase(),
+        temporada.slice(0, 4),
+      )
+      setSquadPlayers(playersResp || [])
       setData({ players: playersResp })
     } catch (err) {
       setError(err.message)
@@ -48,24 +53,13 @@ function HomePage() {
     setLoading(true)
     setError(null)
     try {
-      const transfers = await getTransfers(club.toLowerCase(), temporada.slice(0, 4))
+      const transfers = await getTransfers(
+        club.toLowerCase(),
+        temporada.slice(0, 4),
+      )
       setData({ transfers })
       setPurchasedPlayers(transfers?.altas || [])
       setSoldPlayers(transfers?.bajas || [])
-    } catch (err) {
-      setError(err.message)
-      console.error('Error:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleGetValuations = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const vals = await getValuations(club.toLowerCase(), temporada.slice(0, 4))
-      setData({ valuations: vals })
     } catch (err) {
       setError(err.message)
       console.error('Error:', err)
@@ -81,7 +75,8 @@ function HomePage() {
       const seasonYear = temporada.slice(0, 4)
       const clubData = await getClubData(club.toLowerCase(), seasonYear)
       setData(clubData)
-      setPurchasedPlayers(clubData.transfers?.altas || clubData.players || [])
+      setSquadPlayers(clubData.players || [])
+      setPurchasedPlayers(clubData.transfers?.altas || [])
       setSoldPlayers(clubData.transfers?.bajas || [])
     } catch (err) {
       setError(err.message)
@@ -96,6 +91,8 @@ function HomePage() {
     if (!res) return
     setRevenue(res.net_benefit)
     setRestante(res.budget_remaining)
+    setGasto(res.total_spent || 0)
+    setIngreso(res.total_income || 0)
     console.log('Revenue desde front:', res)
   }
 
@@ -203,13 +200,6 @@ function HomePage() {
             Obtener Transferencias
           </button>
           <button
-            onClick={handleGetValuations}
-            disabled={loading}
-            className="px-4 py-2 rounded-lg text-sm font-medium bg-[#111827] hover:bg-[#1f2937] disabled:opacity-50"
-          >
-            Obtener Valoraciones
-          </button>
-          <button
             onClick={handleGetAllData}
             disabled={loading}
             className="px-4 py-2 rounded-lg text-sm font-medium bg-[#111827] hover:bg-[#1f2937] disabled:opacity-50"
@@ -242,6 +232,24 @@ function HomePage() {
           >
             Cargar Historial Precio
           </button>
+          {/* Botón de admin para construir embeddings (ingesta RAG) */}
+          <button
+            onClick={async () => {
+              try {
+                await launchIngestion({
+                  club: club.toLowerCase(),
+                  season: seasonYear,
+                })
+                alert(`Ingesta lanzada para ${club} ${seasonYear}. Revisa la consola del servidor.`)
+              } catch (e) {
+                alert('Error lanzando la ingesta. Mira la consola del navegador.')
+              }
+            }}
+            disabled={loading}
+            className="px-4 py-2 rounded-lg text-xs font-medium bg-[#0f172a] hover:bg-[#020617] border border-emerald-500/40 text-emerald-300 disabled:opacity-50"
+          >
+            Construir Embeddings
+          </button>
         </div>
 
         {loading && <p className="text-sm text-gray-300">Cargando...</p>}
@@ -255,6 +263,8 @@ function HomePage() {
                 ganancia={revenue}
                 restante={restante}
                 presupuesto={presupuestoFichajes}
+                gasto={gasto}
+                ingreso={ingreso}
               />
             </div>
           </div>
@@ -276,9 +286,19 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <PurchaseTable players={purchasedPlayers} club={club} season={temporada}/>
-            <SalesTable players={soldPlayers} />
+          <div className="lg:col-span-3 grid grid-cols-1 gap-6">
+            {/* Tabla de plantel: se llena al presionar "Obtener Jugadores" o "Obtener Todos los Datos" */}
+            <PlayersTable players={squadPlayers} club={club} season={temporada} />
+
+            {/* Tablas de transferencias: se llenan al presionar "Obtener Transferencias" o "Obtener Todos los Datos" */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <PurchaseTable
+                players={purchasedPlayers}
+                club={club}
+                season={temporada}
+              />
+              <SalesTable players={soldPlayers} />
+            </div>
           </div>
         </div>
 

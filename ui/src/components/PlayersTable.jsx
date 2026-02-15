@@ -1,7 +1,15 @@
+import { useMemo } from 'react' 
 import { useNavigate } from 'react-router-dom'
 
 function PlayersTable({ players = [], club, season }) {
   const navigate = useNavigate()
+  const valorTotalPlantel = useMemo(() => {
+    return players.reduce((acc, p) => {
+      const rawValue = p.valor ?? p.amount;
+      const val = Number(rawValue);
+      return acc + (isNaN(val) ? 0 : val);
+    }, 0);
+  }, [players]);
 
   const handleRowClick = (playerName) => {
     if (playerName && club && season) {
@@ -14,6 +22,12 @@ function PlayersTable({ players = [], club, season }) {
     <div className="w-full mt-6 bg-[#020617] border border-[#1f2937] rounded-2xl overflow-hidden ">
       <div className="px-4 py-3 border-b border-[#1f2937] flex items-center justify-between">
         <h2 className="text-sm font-semibold text-gray-100">PLANTEL</h2>
+        <span className='text-sm text-gray-500'>
+          Valor del plantel: 
+          <span className="text-emerald-400 ml-1">
+            ${new Intl.NumberFormat('es-AR').format(valorTotalPlantel)}
+          </span>
+        </span>
         <span className="text-xs text-gray-500">
           {players.length} jugadores
         </span>
@@ -31,10 +45,7 @@ function PlayersTable({ players = [], club, season }) {
           <tbody>
             {players.length === 0 ? (
               <tr>
-                <td
-                  colSpan={3}
-                  className="px-4 py-6 text-center text-xs text-gray-500"
-                >
+                <td colSpan={3} className="px-4 py-6 text-center text-xs text-gray-500">
                   No hay jugadores cargados todavía.
                 </td>
               </tr>
@@ -50,12 +61,8 @@ function PlayersTable({ players = [], club, season }) {
                     onClick={() => handleRowClick(playerName)}
                     className="border-t border-[#111827] hover:bg-[#0a0e1f] hover:cursor-pointer"
                   >
-                    <td className="px-4 py-3 text-gray-100">
-                      {playerName}
-                    </td>
-                    <td className="px-4 py-3 text-gray-300">
-                      {p.posicion || p.from_club || '-'}
-                    </td>
+                    <td className="px-4 py-3 text-gray-100">{playerName}</td>
+                    <td className="px-4 py-3 text-gray-300">{p.posicion || p.from_club || '-'}</td>
                     <td className="px-4 py-3 text-right">
                       {hasValue ? (
                         <span className="text-emerald-400">
@@ -64,9 +71,7 @@ function PlayersTable({ players = [], club, season }) {
                           }).format(rawValue)}
                         </span>
                       ) : (
-                        <span className="text-emerald-500 font-medium">
-                          Libre / Cesión
-                        </span>
+                        <span className="text-emerald-500 font-medium">Libre / Cesión</span>
                       )}
                     </td>
                   </tr>

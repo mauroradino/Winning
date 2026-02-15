@@ -14,10 +14,12 @@ import PurchaseTable from './components/PurchaseTable'
 import SalesTable from './components/SalesTable'
 import PlayersTable from './components/PlayersTable'
 import SeasonSummary from './components/SeasonSummary'
+import TeamSelector from './components/TeamSelector'
+import YearSelect from './components/YearSelect'
 
 function HomePage() {
-  const [club, setClub] = useState('Boca Juniors')
-  const [temporada, setTemporada] = useState('2025')
+  const [club, setClub] = useState('')
+  const [temporada, setTemporada] = useState('')
   const [presupuestoFichajes, setPresupuestoFichajes] = useState(0)
   const [presupuestoSalarios, setPresupuestoSalarios] = useState(0)
   const [player, setPlayer] = useState('')
@@ -105,6 +107,14 @@ function HomePage() {
     }
   }
 
+  const handleClubChange = (name) => {
+    setClub(name);
+  };
+
+  const handleYearChange = (name) => {
+    setTemporada(name);
+  };
+
   const seasonYear = temporada.slice(0, 4)
 
   return (
@@ -136,22 +146,13 @@ function HomePage() {
         <div className="bg-[#0b1020] border border-[#1f2937] rounded-xl px-4 py-4 grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="flex flex-col gap-1">
             <label className="text-xs text-gray-400 uppercase">Club</label>
-            <input
-              type="text"
-              value={club}
-              onChange={(e) => setClub(e.target.value)}
-              className="bg-[#020617] border border-[#1f2937] rounded-lg px-3 py-2 text-sm text-white outline-none focus:ring-2 focus:ring-emerald-500"
-            />
+            <TeamSelector handle={handleClubChange}/>
+            
           </div>
 
           <div className="flex flex-col gap-1">
             <label className="text-xs text-gray-400 uppercase">Temporada</label>
-            <input
-              type="text"
-              value={temporada}
-              onChange={(e) => setTemporada(e.target.value)}
-              className="bg-[#020617] border border-[#1f2937] rounded-lg px-3 py-2 text-sm text-white outline-none focus:ring-2 focus:ring-emerald-500"
-            />
+            <YearSelect onSelect={handleYearChange}/>
           </div>
 
           <div className="flex flex-col gap-1">
@@ -304,7 +305,6 @@ function HomePage() {
           <SeasonSummary club={club} season={temporada}/>
           </div>
         </div>
-
         {data && (
           <div className="bg-[#020617] border border-[#1f2937] rounded-xl p-4 mt-4 text-xs text-gray-300">
             <h3 className="font-semibold mb-2">Datos crudos (debug)</h3>

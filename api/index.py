@@ -1,14 +1,11 @@
-from fastapi import FastAPI, BackgroundTasks, HTTPException
-from typing import Optional
-import os
+from fastapi import FastAPI, BackgroundTasks
 import sys
 import pandas as pd
-import json
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import unicodedata
 from pathlib import Path
-from aws_s3 import read_aws_csv
+from .aws_s3 import read_aws_csv
 
 # --- CONFIGURACIÓN DE RUTAS DINÁMICAS ---
 # BASE_DIR apunta a la raíz del proyecto (donde está /datasets y /api)
@@ -45,7 +42,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # En producción puedes restringirlo, para pruebas usamos "*"
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

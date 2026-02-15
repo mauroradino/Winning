@@ -24,10 +24,8 @@ s3 = boto3.client(
 
 def read_aws_csv(path):
     try:
-        # Usamos la variable local bucket_name
-        obj = s3.get_object(Bucket=bucket_name, Key=path)
+        obj = s3.get_object(Bucket=bucket_name, Key=path.lower())
         df = pd.read_csv(io.BytesIO(obj['Body'].read()))
-        # Limpieza de NaNs para evitar el error de JSON que tenías en FastAPI
         return df.where(pd.notnull(df), None)
     except Exception as e:
         print(f"Error al leer {path}: {e}")
@@ -36,7 +34,6 @@ def read_aws_csv(path):
 
 def upload_file(df, s3_path):
     csv_buffer = io.StringIO()
-    # Limpieza antes de subir para que el CSV sea consistente
     df_clean = df.where(pd.notnull(df), None)
     df_clean.to_csv(csv_buffer, index=False, encoding="utf-8-sig")
     

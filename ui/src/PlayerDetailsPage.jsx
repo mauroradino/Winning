@@ -31,7 +31,6 @@ function PlayerDetailsPage() {
         const data = await getPlayerInfo(payload)
         
         if (data) {
-          // Verificar que la respuesta tenga la estructura esperada
           if (data.status === "success" && data.data) {
             setPlayerData(data)
             
@@ -61,7 +60,6 @@ function PlayerDetailsPage() {
 
     fetchData()
   }, [nombre, club, season])
-console.log(club)
   const formatCurrency = (value) => {
     if (!value || value === 0) return "$0"
     return "$" + new Intl.NumberFormat('es-AR', {

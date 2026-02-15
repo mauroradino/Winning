@@ -7,20 +7,15 @@ import unicodedata
 from pathlib import Path
 from .aws_s3 import read_aws_csv
 
-# --- CONFIGURACIÓN DE RUTAS DINÁMICAS ---
-# BASE_DIR apunta a la raíz del proyecto (donde está /datasets y /api)
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_PATH = BASE_DIR / "datasets"
 
-# Aseguramos que la raíz del proyecto esté en sys.path para poder importar `ia`
 if str(BASE_DIR) not in sys.path:
     sys.path.append(str(BASE_DIR))
 
 from ia.pinecone_test import ingest_data, get_season_summary
 #from ia.embeddings import ingest_data, query_rag, get_player_current_club
 app = FastAPI(title="Winning Transfer Simulator API")
-
-
 
 
 class RevenueRequest(BaseModel):
@@ -33,7 +28,6 @@ class PlayerValuationRequest(BaseModel):
     season: str
     player: str
 
-# Configuración de CORS
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
@@ -42,7 +36,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=origins, 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -223,9 +217,15 @@ def normalize(text):
 async def get_player_info(data: PlayerRequest):
     df = read_aws_csv(f"datasets/{data.club}/{data.season}/{data.club}_{data.season}_players.csv")
 
+    if df is None:
+        return {
+            "status": "error",
+            "message": f"No se pudo cargar la base de datos para {data.club} en la temporada {data.season}"
+        }
+
     search_name = normalize(data.name)
     
-    filtered_data = df[df["nombre y apellido"].apply(lambda x: search_name in normalize(x))]
+    filtered_data = df[df["nombre y apellido"].apply(lambda x: search_name in normalize(str(x)) if x else False)]
 
     if filtered_data.empty:
         return {"message": "Jugador no encontrado", "buscado": data.name, "status": "error"}

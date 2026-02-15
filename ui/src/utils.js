@@ -29,7 +29,6 @@ export async function callApi(endpoint, options = {}) {
     if (config.body && typeof config.body === 'object') {
       config.body = JSON.stringify(config.body);
     }
-    
     const respuesta = await fetch(url, config);
     
     if (!respuesta.ok) {

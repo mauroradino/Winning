@@ -32,3 +32,20 @@ def read_aws_csv(path):
     except Exception as e:
         print(f"Error al leer {path}: {e}")
         return None
+    
+
+def upload_file(df, s3_path):
+    csv_buffer = io.StringIO()
+    # Limpieza antes de subir para que el CSV sea consistente
+    df_clean = df.where(pd.notnull(df), None)
+    df_clean.to_csv(csv_buffer, index=False, encoding="utf-8-sig")
+    
+    try:
+        s3.put_object(
+            Bucket=bucket_name, 
+            Key=s3_path, 
+            Body=csv_buffer.getvalue()
+        )
+        print(f"✅ Subido exitosamente a S3: {s3_path}")
+    except Exception as e:
+        print(f"❌ Error al subir a S3: {e}")

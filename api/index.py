@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import unicodedata
 from pathlib import Path
+from aws_s3 import read_aws_csv
 
 # --- CONFIGURACIÓN DE RUTAS DINÁMICAS ---
 # BASE_DIR apunta a la raíz del proyecto (donde está /datasets y /api)
@@ -18,7 +19,7 @@ DATA_PATH = BASE_DIR / "datasets"
 if str(BASE_DIR) not in sys.path:
     sys.path.append(str(BASE_DIR))
 
-#from ia.pinecone_test import ingest_data, query_rag, get_player_current_club
+from ia.pinecone_test import ingest_data, get_season_summary
 #from ia.embeddings import ingest_data, query_rag, get_player_current_club
 app = FastAPI(title="Winning Transfer Simulator API")
 
@@ -51,20 +52,16 @@ app.add_middleware(
 )
 
 # --- ENDPOINTS ---
-
 @app.get("/api/squad/{club}/{season}")
 async def get_squad(club: str, season: str):
-    file_path = DATA_PATH / club / season / f"{club}_{season}_players.csv"
+    df = read_aws_csv(f"datasets/{club}/{season}/{club}_{season}_players.csv")
+    df_clean = df.astype(object).replace({pd.NA: None, float('nan'): None})
     
-    if file_path.exists():
-        df = pd.read_csv(file_path)
-        return {
-            "status": "success",
-            "source": "cache",
-            "data": df.to_dict(orient="records")
-        }
-    
-    raise HTTPException(status_code=404, detail=f"Datos no encontrados en {file_path}")
+    return {
+        "status": "success",
+        "source": "cache",
+        "data": df_clean.to_dict(orient="records")
+    }
 
 class TransfersData(BaseModel):
     club: str
@@ -72,19 +69,13 @@ class TransfersData(BaseModel):
 
 @app.post("/api/transfers")
 def get_transfers(data: TransfersData):
-    path_altas = DATA_PATH / data.club / data.season / f"{data.club}_{data.season}_altas.csv"
-    path_bajas = DATA_PATH / data.club / data.season / f"{data.club}_{data.season}_bajas.csv"
-
-    if not path_altas.exists() or not path_bajas.exists():
-        raise HTTPException(status_code=404, detail="Archivos de transferencias no encontrados")
-
-    df_altas = pd.read_csv(path_altas)
-    df_bajas = pd.read_csv(path_bajas)
+    df_altas = read_aws_csv(f"datasets/{data.club}/{data.season}/{data.club}_{data.season}_altas.csv")
+    df_bajas = read_aws_csv(f"datasets/{data.club}/{data.season}/{data.club}_{data.season}_bajas.csv")
 
     for df in (df_altas, df_bajas):
         for col in df.select_dtypes(include=["int64", "float64"]).columns:
             df[col] = df[col].astype(float)
-
+    df.replace({float('nan'): None}, inplace=True)
     return {
         "altas": df_altas.to_dict(orient="records"),
         "bajas": df_bajas.to_dict(orient="records"),
@@ -92,14 +83,8 @@ def get_transfers(data: TransfersData):
 
 @app.post("/api/transfers/revenue")
 def revenue(data: RevenueRequest):
-    path_altas = DATA_PATH / data.club / data.season / f"{data.club}_{data.season}_altas.csv"
-    path_bajas = DATA_PATH / data.club / data.season / f"{data.club}_{data.season}_bajas.csv"
-
-    if not path_altas.exists() or not path_bajas.exists():
-        return {"net_benefit": 0, "budget_remaining": data.transfer_budget}
-
-    df_altas = pd.read_csv(path_altas)
-    df_bajas = pd.read_csv(path_bajas)
+    df_altas = read_aws_csv(f"datasets/{data.club}/{data.season}/{data.club}_{data.season}_altas.csv")
+    df_bajas = read_aws_csv(f"datasets/{data.club}/{data.season}/{data.club}_{data.season}_bajas.csv")
 
     total_spent = pd.to_numeric(df_altas["amount"], errors="coerce").fillna(0).sum()
     total_income = pd.to_numeric(df_bajas["amount"], errors="coerce").fillna(0).sum()
@@ -116,12 +101,7 @@ def revenue(data: RevenueRequest):
 
 @app.post("/api/valuations")
 def get_player_valuation(data: PlayerValuationRequest):
-    path = DATA_PATH / data.club / data.season / f"{data.club}_{data.season}_valuations.csv"
-    
-    if not path.exists():
-        raise HTTPException(status_code=404, detail="Valuaciones no encontradas")
-
-    df_valuation = pd.read_csv(path)
+    df_valuation = read_aws_csv(f"datasets/{data.club}/{data.season}/{data.club}_{data.season}_valuations.csv")
     player_query = normalize(data.player)
 
     def row_match(row):
@@ -157,11 +137,17 @@ def normalize(text: str) -> str:
     return without_accents.lower()
 
 # Endpoint para lanzar la ingesta de datos en segundo plano
-""" @app.post("/api/ingest/{club}/{season}")
+@app.post("/api/ingest/{club}/{season}")
 async def ingest_club_data(club: str, season: str, background_tasks: BackgroundTasks):
     background_tasks.add_task(ingest_data, club, season)
     return {"message": f"Ingesta lanzada para {club} {season}"}
- """
+ 
+
+@app.post("/api/summary/{club}/{season}")
+async def generate_summary(club: str, season: str):
+    res = get_season_summary(club, season)
+    return res
+
 class AgentMessage(BaseModel):
     from_role: str
     text: str
@@ -238,26 +224,15 @@ def normalize(text):
 
 @app.post("/api/playerInfo")
 async def get_player_info(data: PlayerRequest):
-    # 1. Usar la ruta segura con pathlib
-    file_path = DATA_PATH / data.club / data.season / f"{data.club}_{data.season}_players.csv"
-    
-    if not file_path.exists():
-        return {"error": "Archivo no encontrado", "path": str(file_path)}
+    df = read_aws_csv(f"datasets/{data.club}/{data.season}/{data.club}_{data.season}_players.csv")
 
-    df = pd.read_csv(file_path)
-
-    # 2. Filtrado robusto: normalizar y usar contains para ser más flexible
     search_name = normalize(data.name)
     
-    # Aplicar filtro con contains (más flexible que ==)
-    # Esto permite encontrar "Valentino Simoni" aunque haya espacios extra o diferencias sutiles
     filtered_data = df[df["nombre y apellido"].apply(lambda x: search_name in normalize(x))]
 
-    # 3. Verificar si se encontró algo y convertir a diccionario
     if filtered_data.empty:
         return {"message": "Jugador no encontrado", "buscado": data.name, "status": "error"}
 
-    # Retornamos el primer registro encontrado como un JSON válido
     return {
         "status": "success",
         "data": filtered_data.to_dict(orient="records")[0]

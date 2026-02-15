@@ -13,6 +13,8 @@ import PlayerGraph from './components/PlayerGraph'
 import PurchaseTable from './components/PurchaseTable'
 import SalesTable from './components/SalesTable'
 import PlayersTable from './components/PlayersTable'
+import SeasonSummary from './components/SeasonSummary'
+
 function HomePage() {
   const [club, setClub] = useState('Boca Juniors')
   const [temporada, setTemporada] = useState('2025')
@@ -299,6 +301,7 @@ function HomePage() {
               />
               <SalesTable players={soldPlayers} />
             </div>
+          <SeasonSummary club={club} season={temporada}/>
           </div>
         </div>
 

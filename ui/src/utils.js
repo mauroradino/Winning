@@ -1,4 +1,5 @@
 const INTERNAL_API_BASE_URL = 'https://winning-black.vercel.app/api';
+//const INTERNAL_API_BASE_URL = 'http://127.0.0.1:5000/api';
 
 /**
  * Función genérica para llamar a la API
@@ -29,7 +30,6 @@ export async function callApi(endpoint, options = {}) {
       config.body = JSON.stringify(config.body);
     }
     
-    console.log("URL ", url)
     const respuesta = await fetch(url, config);
     
     if (!respuesta.ok) {

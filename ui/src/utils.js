@@ -1,5 +1,5 @@
-const INTERNAL_API_BASE_URL = 'https://winning-black.vercel.app/api';
-//const INTERNAL_API_BASE_URL = 'http://127.0.0.1:5000/api';
+//const INTERNAL_API_BASE_URL = 'https://winning-black.vercel.app/api';
+const INTERNAL_API_BASE_URL = 'http://127.0.0.1:5000/api';
 
 /**
  * Función genérica para llamar a la API

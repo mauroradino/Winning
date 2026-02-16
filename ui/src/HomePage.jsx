@@ -149,7 +149,7 @@ function HomePage() {
     <div className="bg-[#050816] min-h-screen text-white">
       <h1 className='text-4xl font-bold text-center pt-4'>Winning - Technical Challenge</h1>
       <div className="max-w-6xl mx-auto py-8 px-4 space-y-6">
-        <InputSection players={squadPlayers} onSelect={setPlayer} club={club} player={player} temporada={temporada} presupuestoFichajes={presupuestoFichajes} presupuestoSalario={presupuestoSalarios} handleClubChange={handleClubChange} handleYearChange={handleYearChange} setPresupuestoFichajes={setPresupuestoFichajes} setPresupuestoSalarios={setPresupuestoSalarios} setPlayer={setPlayer}/>
+        <InputSection players={squadPlayers} onSelect={setPlayer} club={club} player={player} temporada={temporada} presupuestoFichajes={presupuestoFichajes} presupuestoSalarios={presupuestoSalarios} handleClubChange={handleClubChange} handleYearChange={handleYearChange} setPresupuestoFichajes={setPresupuestoFichajes} setPresupuestoSalarios={setPresupuestoSalarios} setPlayer={setPlayer}/>
         <ButtonSection club={club} seasonYear={temporada} player={player} loading={loading} handleGetPlayers={handleGetPlayers} handleGetTransfers={handleGetTransfers} handleGetAllData={handleGetAllData} showRevenue={showRevenue} showValuations={showValuations} presupuestoFichajes={presupuestoFichajes} />
 
         {loading && <p className="text-sm text-gray-300">Cargando...</p>}
@@ -162,9 +162,11 @@ function HomePage() {
               <RevenueCard
                 ganancia={revenue}
                 restante={restante}
-                presupuesto={presupuestoFichajes}
+                presupuestoFichajes={presupuestoFichajes}
+                presupuestoSalarios={presupuestoSalarios}
                 gasto={gasto}
                 ingreso={ingreso}
+                players={squadPlayers}
               />
             </div>
           </div>

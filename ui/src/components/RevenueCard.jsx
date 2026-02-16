@@ -1,9 +1,16 @@
-function RevenueCard({ presupuesto, ganancia, restante, gasto, ingreso }) {
+function RevenueCard({ presupuestoSalarios, presupuestoFichajes, ganancia, restante, gasto, ingreso, players }) {
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('es-AR', {
       maximumFractionDigits: 0,
     }).format(value || 0);
   };
+
+  const totalSueldos = (players || []).reduce((acc, p) => {
+    const sueldo = Number(p.sueldo_anual) || 0;
+    return acc + sueldo;
+  }, 0);
+
+  const restanteSueldos = (presupuestoSalarios || 0) - totalSueldos;
 
   const isHealthy = restante >= 0;
 
@@ -12,10 +19,10 @@ function RevenueCard({ presupuesto, ganancia, restante, gasto, ingreso }) {
       {/* Presupuesto inicial */}
       <div className="flex items-center justify-between">
         <span className="text-xs uppercase tracking-wide text-gray-400">
-          Presupuesto inicial
+          Presupuesto Transferencias inicial 
         </span>
         <span className="text-lg font-semibold">
-          ${formatCurrency(presupuesto)}
+          ${formatCurrency(presupuestoFichajes)}
         </span>
       </div>
 
@@ -41,7 +48,7 @@ function RevenueCard({ presupuesto, ganancia, restante, gasto, ingreso }) {
       {/* Presupuesto restante */}
       <div className="flex items-center justify-between border-t border-[#1f2937] pt-3 mt-1">
         <span className="text-xs uppercase tracking-wide text-gray-400">
-          Presupuesto restante
+          Presupuesto Transferencias Restante
         </span>
         <span
           className={`text-lg font-semibold ${
@@ -49,6 +56,37 @@ function RevenueCard({ presupuesto, ganancia, restante, gasto, ingreso }) {
           }`}
         >
           {restante >= 0 ? '+' : '-'}${formatCurrency(Math.abs(restante))}
+        </span>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-[#1f2937] pt-3 mt-1">
+        <span className="text-xs uppercase tracking-wide text-gray-400">
+          Presupuesto Sueldos
+        </span>
+        <span className="text-lg font-semibold">
+          ${formatCurrency(presupuestoSalarios)}
+        </span>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <span className="text-xs uppercase tracking-wide text-gray-400">
+          Total Gasto en Sueldos
+        </span>
+        <span className="text-lg font-semibold text-red-400">
+          -${formatCurrency(Math.abs(totalSueldos))}
+        </span>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-[#1f2937] pt-3 mt-1">
+        <span className="text-xs uppercase tracking-wide text-gray-400">
+          Presupuesto Sueldos Restante
+        </span>
+        <span
+          className={`text-lg font-semibold ${
+            restanteSueldos >= 0 ? 'text-emerald-400' : 'text-red-400'
+          }`}
+        >
+          {restanteSueldos >= 0 ? '+' : '-'}${formatCurrency(Math.abs(restanteSueldos))}
         </span>
       </div>
 

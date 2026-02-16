@@ -19,6 +19,13 @@ function PlayersTable({ players = [], club, season }) {
     }
   }
 
+  const formatCurrency = (value) => {
+    if (!value || value === 0) return "$0"
+    return "$" + new Intl.NumberFormat('es-AR', {
+      maximumFractionDigits: 0,
+    }).format(value)
+  }
+
   return (
     <div className="w-full mt-6 bg-[#020617] border border-[#1f2937] rounded-2xl overflow-hidden ">
       <div className="px-4 py-3 border-b border-[#1f2937] flex items-center justify-between">
@@ -40,6 +47,7 @@ function PlayersTable({ players = [], club, season }) {
             <tr>
               <th className="px-4 py-3">Jugador</th>
               <th className="px-4 py-3">Posición</th>
+              <th className="px-4 py-3">Sueldo</th>
               <th className="px-4 py-3 text-right">Valor</th>
             </tr>
           </thead>
@@ -64,6 +72,7 @@ function PlayersTable({ players = [], club, season }) {
                   >
                     <td className="px-4 py-3 text-gray-100">{playerName}</td>
                     <td className="px-4 py-3 text-gray-300">{p.posicion || p.from_club || '-'}</td>
+                    <td className="px-4 py-3 text-gray-300">{formatCurrency(p.sueldo_anual) || '-'}</td>
                     <td className="px-4 py-3 text-right">
                       {hasValue ? (
                         <span className="text-emerald-400">

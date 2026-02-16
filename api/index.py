@@ -13,7 +13,7 @@ DATA_PATH = BASE_DIR / "datasets"
 if str(BASE_DIR) not in sys.path:
     sys.path.append(str(BASE_DIR))
 
-from ia.pinecone_test import ingest_data, get_season_summary
+from ia.pinecone_test import ingest_data, get_season_summary, get_squad_analysis
 #from ia.embeddings import ingest_data, query_rag, get_player_current_club
 app = FastAPI(title="Winning Transfer Simulator API")
 
@@ -63,7 +63,6 @@ class AgentMessage(BaseModel):
     from_role: str
     text: str
 
-
 class AgentRequest(BaseModel):
     question: str
     history: list[AgentMessage] | None = None
@@ -71,7 +70,7 @@ class AgentRequest(BaseModel):
 class PlayerRequest(BaseModel):
     name:str
     club:str
-    season:str
+    season:str 
 
 # --- UTILIDADES ---
 
@@ -232,3 +231,8 @@ async def get_player_info(data: PlayerRequest):
         "status": "success",
         "data": clean_data
     }
+
+@app.post("/api/squadAnalysis")
+def squad_analysis(data: TransfersData):
+    analysis = get_squad_analysis(data.club, data.season)
+    return analysis

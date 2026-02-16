@@ -15,6 +15,7 @@ import PlayersTable from './components/PlayersTable'
 import SeasonSummary from './components/SeasonSummary'
 import ButtonSection from './components/ButtonSection'
 import InputSection from './components/InputSection'
+import SquadAnalysis from './components/SquadAnalysis'
 
 function HomePage() {
   const [club, setClub] = useState('')
@@ -148,7 +149,7 @@ function HomePage() {
     <div className="bg-[#050816] min-h-screen text-white">
       <h1 className='text-4xl font-bold text-center pt-4'>Winning - Technical Challenge</h1>
       <div className="max-w-6xl mx-auto py-8 px-4 space-y-6">
-        <InputSection club={club} player={player} temporada={temporada} presupuestoFichajes={presupuestoFichajes} presupuestoSalario={presupuestoSalarios} handleClubChange={handleClubChange} handleYearChange={handleYearChange} setPresupuestoFichajes={setPresupuestoFichajes} setPresupuestoSalarios={setPresupuestoSalarios} setPlayer={setPlayer}/>
+        <InputSection players={squadPlayers} onSelect={setPlayer} club={club} player={player} temporada={temporada} presupuestoFichajes={presupuestoFichajes} presupuestoSalario={presupuestoSalarios} handleClubChange={handleClubChange} handleYearChange={handleYearChange} setPresupuestoFichajes={setPresupuestoFichajes} setPresupuestoSalarios={setPresupuestoSalarios} setPlayer={setPlayer}/>
         <ButtonSection club={club} seasonYear={temporada} player={player} loading={loading} handleGetPlayers={handleGetPlayers} handleGetTransfers={handleGetTransfers} handleGetAllData={handleGetAllData} showRevenue={showRevenue} showValuations={showValuations} presupuestoFichajes={presupuestoFichajes} />
 
         {loading && <p className="text-sm text-gray-300">Cargando...</p>}
@@ -179,6 +180,7 @@ function HomePage() {
               <SalesTable players={soldPlayers} />
             </div>
           <SeasonSummary club={club} season={temporada}/>
+          <SquadAnalysis club={club} season={temporada} />
           </div>
         </div>
         {data && (

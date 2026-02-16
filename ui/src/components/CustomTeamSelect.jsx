@@ -20,15 +20,15 @@ const CustomSelect = ({ options, onSelect }) => {
         <ul className="absolute z-10 w-full mt-1 bg-[#020617] border border-[#1f2937] rounded-lg overflow-hidden shadow-xl">
           {options.map((option) => (
             <li 
-              key={option}
+              key={option.player_id}
               onClick={() => {
-                setSelected(option);
+                setSelected(option["nombre y apellido"] || option);
                 setIsOpen(false);
-                onSelect(option);
+                onSelect(option["nombre y apellido"] || option);
               }}
               className="px-3 py-2 text-sm text-white cursor-pointer hover:bg-emerald-500 transition-colors"
             >
-              {option}
+              {option["nombre y apellido"] || option}
             </li>
           ))}
         </ul>

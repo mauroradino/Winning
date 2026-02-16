@@ -1,6 +1,7 @@
+import PlayerSelector from './PlayerSelector'
 import TeamSelector from './TeamSelector'
 import YearSelect from './YearSelect'
-function InputSection({club, player, temporada, presupuestoFichajes, presupuestoSalarios, handleClubChange, handleYearChange, setPresupuestoFichajes, setPresupuestoSalarios, setPlayer}){
+function InputSection({club, players, onSelect, player, temporada, presupuestoFichajes, presupuestoSalarios, handleClubChange, handleYearChange, setPresupuestoFichajes, setPresupuestoSalarios, setPlayer}){
     return(
         <>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -59,13 +60,7 @@ function InputSection({club, player, temporada, presupuestoFichajes, presupuesto
 
           <div className="flex flex-col gap-1 md:col-span-2">
             <label className="text-xs text-gray-400 uppercase">Jugador</label>
-            <input
-              type="text"
-              value={player}
-              onChange={(e) => setPlayer(e.target.value)}
-              className="bg-[#020617] border border-[#1f2937] rounded-lg px-3 py-2 text-sm text-white outline-none focus:ring-2 focus:ring-emerald-500"
-              placeholder="Ej: Leandro Brey"
-            />
+            <PlayerSelector players={players} onSelect={onSelect}/>
           </div>
         </div>
         </>

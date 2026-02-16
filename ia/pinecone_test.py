@@ -178,34 +178,34 @@ def get_player_current_club(player_name: str) -> str:
     
     return club_actual
 
-def get_season_summary(club, season):
-    print(club, season)
-    busquedas = [
-        {"q": f"Ventas y bajas de {club} en {season}", "tipos": ["bajas"]},
-        {"q": f"Compras y altas de {club} en {season}", "tipos": ["altas"]},
-        {"q": f"Plantilla y jugadores de {club} en {season}", "tipos": ["players", "valuations"]}
-    ]
-    
-    contexto_total = []
-    
-    for item in busquedas:
-        query_vector = client.embeddings.create(
-            input=item["q"], 
-            model="text-embedding-3-small"
-        ).data[0].embedding
-        res = index.query(
-            vector=query_vector,
-            top_k=40, 
-            filter={
-                "club": {"$eq": club.lower()}, 
-                "season": {"$eq": str(season)}, 
-                "tipo": {"$in": item["tipos"]} 
-            },
-            include_metadata=True
-        )
-        contexto_total.extend([m['metadata']['text'] for m in res['matches']])
 
-    context_str = "\n".join(list(set(contexto_total)))
+def get_context_from_pinecone(club, season, types):
+    query_text = f"Detalles de {', '.join(types)} para el club {club} en la temporada {season}"
+    query_vector = client.embeddings.create(
+        input=query_text, 
+        model="text-embedding-3-small"
+    ).data[0].embedding
+
+    res = index.query(
+        vector=query_vector,
+        top_k=40, 
+        filter={
+            "club": {"$eq": club.lower()}, 
+            "season": {"$eq": str(season)}, 
+            "tipo": {"$in": types} 
+        },
+        include_metadata=True
+    )
+    
+    matches = res.get('matches', [])
+    raw_texts = [m['metadata']['text'].strip() for m in matches if 'text' in m['metadata']]
+    unique_texts = list(dict.fromkeys(raw_texts))
+    context_str = "\n---\n".join(unique_texts)
+    return context_str
+
+
+def get_season_summary(club, season):
+    context_str = get_context_from_pinecone(club, season, ["altas", "bajas"])
 
     response = client.chat.completions.create(
         model="gpt-4o",
@@ -214,15 +214,36 @@ def get_season_summary(club, season):
             {
                 "role": "system", 
                 "content": (
-                    "Eres un analista financiero deportivo de alto nivel. "
-                    "Tu objetivo es realizar un balance contable exacto de la temporada. "
-                    "Suma todos los montos de 'altas' para obtener el gasto total. "
-                    "Suma todos los montos de 'bajas' para obtener el ingreso total. "
-                    "Resta Gastos de Ingresos para el Balance Neto. "
-                    "Presenta los datos en un formato profesional y legible."
+                    "Eres un CFO de un club de fútbol. Tu objetivo es realizar un balance contable. "
+                    "Calcula Gasto Total (altas), Ingreso Total (bajas) y Balance Neto. "
+                    "IMPORTANTE: Los datos de entrada pueden contener duplicados o múltiples registros del mismo jugador."
+                    "Ignora detalles tácticos; enfócate en la solvencia financiera de la temporada."
                 )
             },
-            {"role": "user", "content": f"DATOS DE LA TEMPORADA:\n{context_str}\n\nPregunta: Resume el balance financiero, jugadores clave y bajas."}
+            {"role": "user", "content": f"DATOS FINANCIEROS:\n{context_str}\n\nResume el balance final."}
+        ]
+    )
+    return response.choices[0].message.content
+
+def get_squad_analysis(club, season):
+    context_str = get_context_from_pinecone(club, season, ["players", "valuations"])
+
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        temperature=0.2, 
+        messages=[
+            {
+                "role": "system", 
+                "content": (
+                    "Eres un Director Deportivo. Realiza un diagnóstico de profundidad de plantilla. "
+                    "Analiza: Distribución de edad, equilibrio por posición y activos de reventa. "
+                    "No hagas cálculos contables; enfócate en el talento y riesgo deportivo."
+                )
+            },
+            {
+                "role": "user", 
+                "content": f"DATOS DE PLANTILLA:\n{context_str}\n\nRealiza el análisis de profundidad."
+            }
         ]
     )
     return response.choices[0].message.content

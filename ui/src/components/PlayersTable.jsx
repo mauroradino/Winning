@@ -15,6 +15,7 @@ function PlayersTable({ players = [], club, season }) {
     if (playerName && club && season) {
       const seasonYear = season.toString().slice(0, 4)
       navigate(`/details?name=${encodeURIComponent(playerName)}&season=${encodeURIComponent(seasonYear)}&club=${encodeURIComponent(club)}`)
+      console.log(`/details?name=${encodeURIComponent(playerName)}&season=${encodeURIComponent(seasonYear)}&club=${encodeURIComponent(club)}`)
     }
   }
 

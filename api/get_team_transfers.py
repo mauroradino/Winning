@@ -33,12 +33,10 @@ def get_team_transfers(url: str, season: str):
             name = name_tag.get_text(strip=True) if name_tag else "N/A"
             tds = item.find_all('td')
             from_club = "N/A"
-            amount_numeric = 0  # Valor por defecto
+            amount_numeric = 0 
             
-            # Verificar si existe tds[12] antes de acceder
             if len(tds) > 12:
                 td_amount = tds[12]
-                # Primero verificar si existe la clase normaler-text
                 precio_sesion = td_amount.find('i', class_="normaler-text")
                 if precio_sesion:
                     amount_text = precio_sesion.get_text(strip=True)
@@ -57,7 +55,6 @@ def get_team_transfers(url: str, season: str):
                     except (ValueError, IndexError):
                         amount_numeric = 0
                 else:
-                    # Si no existe normaler-text, buscar en el enlace
                     amount_link = td_amount.find('a')
                     if amount_link:
                         amount = amount_link.get_text(strip=True)
@@ -94,7 +91,7 @@ def get_team_transfers(url: str, season: str):
             name = name_tag.get_text(strip=True) if name_tag else "N/A"
             tds = item.find_all('td')
             to_club = "N/A"
-            amount_numeric = 0  # Valor por defecto
+            amount_numeric = 0  
             
             if len(tds) > 8:
                 bloque_club = tds[8]
@@ -102,10 +99,8 @@ def get_team_transfers(url: str, season: str):
                 if club_link and club_link.get('title'):
                     to_club = club_link["title"]
             
-            # Verificar si existe tds[12] antes de acceder
             if len(tds) > 12:
                 td_amount = tds[12]
-                # Primero verificar si existe la clase normaler-text
                 precio_sesion = td_amount.find('i', class_="normaler-text")
                 if precio_sesion:
                     amount_text = precio_sesion.get_text(strip=True)
@@ -124,7 +119,6 @@ def get_team_transfers(url: str, season: str):
                     except (ValueError, IndexError):
                         amount_numeric = 0
                 else:
-                    # Si no existe normaler-text, buscar en el enlace
                     amount_link = td_amount.find('a')
                     if amount_link:
                         amount = amount_link.get_text(strip=True)
@@ -151,5 +145,3 @@ def get_team_transfers(url: str, season: str):
         return tabla_altas, tabla_bajas
     else:
         print(f"Error al acceder: {response.status_code}")
-
-#print(get_team_transfers("https://www.transfermarkt.com.ar/ca-boca-juniors/transfers/verein/189/saison_id/","2025"))

@@ -37,23 +37,44 @@ const MarkdownReport = ({ content }) => {
   );
 };
 
-function SeasonSummary({club, season}){
+
+
+
+function SeasonSummary({club, season, loading}){
   const [content, setContent] = useState("")
+  const [isGenerating, setIsGenerating] = useState(false)
 
   const generateSummary = async () =>{
-    const response = await callApi(`/summary/${club}/${season}`,{
-      method: "POST"
-    })
-    setContent(response)
+    setIsGenerating(true)
+    setContent("") 
+    try {
+      const response = await callApi(`/summary/${club}/${season}`,{
+        method: "POST"
+      })
+      setContent(response)
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   return(
     <div className="w-full mt-6 bg-[#020617] border border-[#1f2937] rounded-2xl overflow-hidden ">
       <div className="px-4 py-3 border-b border-[#1f2937] flex items-center justify-between">
         <h2 className="text-sm font-semibold text-gray-100">RESUMEN DE TEMPORADA GENERADO POR IA</h2>
-        <button onClick={generateSummary} className="px-4 py-2 rounded-lg text-sm font-medium bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50">Generar Resumen</button>
+        {isGenerating ? (
+          <p className="text-emerald-500 text-sm font-medium animate-pulse">Generando Resumen...</p>
+        ) : loading ? (
+          <p className="text-gray-400 text-sm">Cargando Datos...</p>
+        ) : null}
+        <button 
+          onClick={generateSummary} 
+          disabled={isGenerating || !club || !season}
+          className="px-4 py-2 rounded-lg text-sm font-medium bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {isGenerating ? "Procesando..." : "Generar Resumen"}
+        </button>
       </div>
-      <MarkdownReport content={content}/>
+      {content && <MarkdownReport content={content}/>}
     </div>
   )
 }

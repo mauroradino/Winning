@@ -12,7 +12,7 @@ const CustomSelect = ({ options, onSelect }) => {
         className="w-full bg-[#020617] border border-[#1f2937] rounded-lg px-3 py-2 text-sm text-white cursor-pointer flex justify-between items-center hover:border-emerald-500 transition-colors"
       >
         {selected || "Seleccioná un Club"}
-        <span className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>▼</span>
+        <span className={`transform text-[10px] transition-transform ${isOpen ? 'rotate-180' : ''}`}>▼</span>
       </div>
 
       {/* Lista Desplegable Custom */}

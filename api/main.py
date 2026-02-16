@@ -1,10 +1,9 @@
-import os
 import json
 import pandas as pd
 from get_teams_players import get_players
 from get_team_transfers import get_team_transfers
 from get_valuations import get_all_team_valuations
-from aws_s3 import upload_file
+from .aws_s3 import upload_file
 import math 
 
 with open("urls.json", "r") as f:

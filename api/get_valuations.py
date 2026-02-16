@@ -6,14 +6,12 @@ from urllib3.util.retry import Retry
 
 club_cache = {}
 
-# Modificamos get_session para que sea más resiliente
 def get_session():
     session = requests.Session()
-    # Definimos la política de reintentos
     retry_strategy = Retry(
-        total=3, # Reintenta hasta 3 veces
-        backoff_factor=2, # Espera 2s, 4s, 8s entre intentos
-        status_forcelist=[429, 500, 502, 503, 504], # Reintenta si hay saturación
+        total=3, 
+        backoff_factor=2, 
+        status_forcelist=[429, 500, 502, 503, 504], 
     )
     adapter = HTTPAdapter(max_retries=retry_strategy)
     session.mount("https://", adapter)
@@ -26,14 +24,12 @@ def get_session():
     })
     return session
 
-# Usamos la nueva sesión
 session = get_session()
 
 def get_club_name_by_id(club_id):
     if not club_id or str(club_id) in ["0", "N/A", "None"]:
         return "Sin Club / Desconocido"
     
-    # 1. Verificar si el club ya está en el Cache
     club_id_str = str(club_id)
     if club_id_str in club_cache:
         return club_cache[club_id_str]
@@ -48,7 +44,6 @@ def get_club_name_by_id(club_id):
             
             if h1_name:
                 name = h1_name.get_text(strip=True)
-                # 2. Guardar en Cache para futuras consultas
                 club_cache[club_id_str] = name
                 return name
                 
@@ -58,7 +53,6 @@ def get_club_name_by_id(club_id):
     return f"Club {club_id}"
 
 def get_valuations(player_id, player_name):
-    # La API es extremadamente rápida, no requiere la sesión pesada
     url = f"https://tmapi-alpha.transfermarkt.technology/player/{player_id}/market-value-history"
     try:
         response = session.get(url, timeout=10)
@@ -75,7 +69,6 @@ def get_valuations(player_id, player_name):
         for entry in history_raw:
             c_id = entry.get('clubId')
             
-            # Aquí se aplica la optimización del cache
             c_nombre = get_club_name_by_id(c_id)
             
             valuations_parsed.append({

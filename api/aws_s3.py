@@ -6,20 +6,19 @@ import io
 
 load_dotenv()
 
-# Cambia estos nombres para que coincidan EXACTAMENTE con lo que pusiste en Vercel
-aws_ak = os.getenv("AWS_ACCESS_KEY_ID") # Agregado _ID
-aws_secret = os.getenv("AWS_SECRET_ACCESS_KEY") # Nombre estándar
+aws_ak = os.getenv("AWS_ACCESS_KEY_ID") 
+aws_secret = os.getenv("AWS_SECRET_ACCESS_KEY") 
 bucket_name = os.getenv("BUCKET_NAME")
+region = os.getenv("AWS_REGION")
 
 if not aws_ak or not aws_secret:
     print("Faltan las variables de entorno de AWS")
 
-# Es mejor inicializar el cliente dentro de una función o asegurar que tenga los datos
 s3 = boto3.client(
     's3',
     aws_access_key_id=aws_ak,
     aws_secret_access_key=aws_secret,
-    region_name='us-east-2' # Cambia a la región que se ve en tu captura (Ohio)
+    region_name=region 
 )
 
 def read_aws_csv(path):

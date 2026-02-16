@@ -230,7 +230,9 @@ async def get_player_info(data: PlayerRequest):
     if filtered_data.empty:
         return {"message": "Jugador no encontrado", "buscado": data.name, "status": "error"}
 
+    clean_data = filtered_data.replace({float('nan'): None}).to_dict(orient="records")[0]
+
     return {
         "status": "success",
-        "data": filtered_data.to_dict(orient="records")[0]
+        "data": clean_data
     }

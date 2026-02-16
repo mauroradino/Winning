@@ -13,7 +13,7 @@ const YearSelect = ({ onSelect }) => {
   };
 
   return (
-    <div className="relative w-full"> {/* Más angosto para años */}
+    <div className="relative w-full">
       <div 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full bg-[#020617] border border-[#1f2937] rounded-lg px-3 py-2 text-sm text-white cursor-pointer flex justify-between items-center hover:border-emerald-500 transition-colors"

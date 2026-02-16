@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import {
   getPlayers,
@@ -34,8 +34,17 @@ function HomePage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [data, setData] = useState(null)
+  const transfersRequestRef = useRef(null)
+
+  useEffect(() => {
+    setPurchasedPlayers([])
+    setSoldPlayers([])
+    transfersRequestRef.current = null
+  }, [club, temporada])
 
   const handleGetPlayers = async () => {
+    setSquadPlayers([])
+    setData(null)
     setLoading(true)
     setError(null)
     try {
@@ -54,39 +63,61 @@ function HomePage() {
   }
 
   const handleGetTransfers = async () => {
+    const currentClub = club.toLowerCase()
+    const currentSeason = temporada.slice(0, 4)
+    const requestId = `${currentClub}-${currentSeason}-${Date.now()}`
+    transfersRequestRef.current = requestId
+    setPurchasedPlayers([])
+    setSoldPlayers([])
+    setData(null)
     setLoading(true)
     setError(null)
     try {
       const transfers = await getTransfers(
-        club.toLowerCase(),
-        temporada.slice(0, 4),
+        currentClub,
+        currentSeason,
       )
-      setData({ transfers })
-      setPurchasedPlayers(transfers?.altas || [])
-      setSoldPlayers(transfers?.bajas || [])
+      if (transfersRequestRef.current === requestId && club.toLowerCase() === currentClub && temporada.slice(0, 4) === currentSeason) {
+        setData({ transfers })
+        setPurchasedPlayers(transfers?.altas || [])
+        setSoldPlayers(transfers?.bajas || [])
+      }
     } catch (err) {
-      setError(err.message)
-      console.error('Error:', err)
+      if (transfersRequestRef.current === requestId && club.toLowerCase() === currentClub && temporada.slice(0, 4) === currentSeason) {
+        setError(err.message)
+        console.error('Error:', err)
+      }
     } finally {
-      setLoading(false)
+      if (transfersRequestRef.current === requestId && club.toLowerCase() === currentClub && temporada.slice(0, 4) === currentSeason) {
+        setLoading(false)
+      }
     }
   }
 
   const handleGetAllData = async () => {
+    const currentClub = club.toLowerCase()
+    const currentSeason = temporada.slice(0, 4)
+    const requestId = `${currentClub}-${currentSeason}-${Date.now()}`
+    transfersRequestRef.current = requestId
     setLoading(true)
     setError(null)
     try {
-      const seasonYear = temporada.slice(0, 4)
-      const clubData = await getClubData(club.toLowerCase(), seasonYear)
-      setData(clubData)
-      setSquadPlayers(clubData.players || [])
-      setPurchasedPlayers(clubData.transfers?.altas || [])
-      setSoldPlayers(clubData.transfers?.bajas || [])
+      const clubData = await getClubData(currentClub, currentSeason)
+      if (transfersRequestRef.current === requestId && club.toLowerCase() === currentClub && temporada.slice(0, 4) === currentSeason) {
+        setData(clubData)
+        setSquadPlayers(clubData.players || [])
+        setPurchasedPlayers(clubData.transfers?.altas || [])
+        setSoldPlayers(clubData.transfers?.bajas || [])
+      }
     } catch (err) {
-      setError(err.message)
-      console.error('Error:', err)
+      if (transfersRequestRef.current === requestId && club.toLowerCase() === currentClub && temporada.slice(0, 4) === currentSeason) {
+        setError(err.message)
+        console.error('Error:', err)
+      }
     } finally {
-      setLoading(false)
+      if (transfersRequestRef.current === requestId && club.toLowerCase() === currentClub && temporada.slice(0, 4) === currentSeason) {
+        setLoading(false)
+      }
     }
   }
 
@@ -97,7 +128,6 @@ function HomePage() {
     setRestante(res.budget_remaining)
     setGasto(res.total_spent || 0)
     setIngreso(res.total_income || 0)
-    console.log('Revenue desde front:', res)
   }
 
   const showValuations = async (payload) => {
@@ -235,24 +265,6 @@ function HomePage() {
           >
             Cargar Historial Precio
           </button>
-          {/* Botón de admin para construir embeddings (ingesta RAG) */}
-          <button
-            onClick={async () => {
-              try {
-                await launchIngestion({
-                  club: club.toLowerCase(),
-                  season: seasonYear,
-                })
-                alert(`Ingesta lanzada para ${club} ${seasonYear}. Revisa la consola del servidor.`)
-              } catch (e) {
-                alert('Error lanzando la ingesta. Mira la consola del navegador.')
-              }
-            }}
-            disabled={loading}
-            className="px-4 py-2 rounded-lg text-xs font-medium bg-[#0f172a] hover:bg-[#020617] border border-emerald-500/40 text-emerald-300 disabled:opacity-50"
-          >
-            Construir Embeddings
-          </button>
         </div>
 
         {loading && <p className="text-sm text-gray-300">Cargando...</p>}
@@ -290,10 +302,7 @@ function HomePage() {
           </div>
 
           <div className="lg:col-span-3 grid grid-cols-1 gap-6">
-            {/* Tabla de plantel: se llena al presionar "Obtener Jugadores" o "Obtener Todos los Datos" */}
             <PlayersTable players={squadPlayers} club={club} season={temporada} />
-
-            {/* Tablas de transferencias: se llenan al presionar "Obtener Transferencias" o "Obtener Todos los Datos" */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <PurchaseTable
                 players={purchasedPlayers}

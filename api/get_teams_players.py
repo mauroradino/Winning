@@ -1,7 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
-import time
 
 def get_players(url: str):
     headers = {
@@ -49,7 +47,7 @@ def get_players(url: str):
                 posicion = all_inline_tds[-1].get_text(strip=True) if all_inline_tds else "N/A"
                 tds_zentriert = item.find_all('td', class_='zentriert')
                 td_valor = item.find('td', class_='rechts hauptlink')
-                valor_num = 0  # Inicializar con valor por defecto
+                valor_num = 0  
                 if td_valor and td_valor.find('a'):
                     raw_v = td_valor.find('a').get_text(strip=True).replace('€', '').replace(',', '.')
                     if 'mill' in raw_v:
@@ -66,7 +64,7 @@ def get_players(url: str):
                         fecha = partes[0]
                         edad = partes[1].replace(")", "")
                 
-                club_anterior = "N/A"  # Valor por defecto
+                club_anterior = "N/A"  
                 if len(tds_zentriert) > 7:
                     club_link = tds_zentriert[6].find('a')
                     if club_link and club_link.get('title'):
@@ -117,4 +115,3 @@ def get_players(url: str):
         print(f"Error de acceso: {response.status_code}")
         return []
     
-#print(get_players("https://www.transfermarkt.es/ca-boca-juniors/kader/verein/189/plus/1/galerie/0?saison_id=2025"))

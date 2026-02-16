@@ -18,16 +18,6 @@ from ia.pinecone_test import ingest_data, get_season_summary
 app = FastAPI(title="Winning Transfer Simulator API")
 
 
-class RevenueRequest(BaseModel):
-    club: str
-    season: str
-    transfer_budget: float
-
-class PlayerValuationRequest(BaseModel):
-    club: str
-    season: str
-    player: str
-
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
@@ -42,6 +32,57 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+# --- MODELOS Y UTILIDADES ---
+
+class TransfersData(BaseModel):
+    club: str
+    season: str
+
+class RevenueRequest(BaseModel):
+    club: str
+    season: str
+    transfer_budget: float
+
+class PlayerValuationRequest(BaseModel):
+    club: str
+    season: str
+    player: str
+
+class RevenueRequest(BaseModel):
+    club: str
+    season: str
+    transfer_budget: float
+
+class PlayerValuationRequest(BaseModel):
+    club: str
+    season: str
+    player: str
+
+class AgentMessage(BaseModel):
+    from_role: str
+    text: str
+
+
+class AgentRequest(BaseModel):
+    question: str
+    history: list[AgentMessage] | None = None
+
+class PlayerRequest(BaseModel):
+    name:str
+    club:str
+    season:str
+
+# --- UTILIDADES ---
+
+def normalize(text):
+    if pd.isna(text) or text is None:
+        return ""
+    text_str = str(text)
+    text_nfkd = unicodedata.normalize("NFD", text_str)
+    without_accents = "".join(c for c in text_nfkd if unicodedata.category(c) != "Mn")
+    return without_accents.lower().strip()
+
 # --- ENDPOINTS ---
 @app.get("/api/squad/{club}/{season}")
 async def get_squad(club: str, season: str):
@@ -54,9 +95,7 @@ async def get_squad(club: str, season: str):
         "data": df_clean.to_dict(orient="records")
     }
 
-class TransfersData(BaseModel):
-    club: str
-    season: str
+
 
 @app.post("/api/transfers")
 def get_transfers(data: TransfersData):
@@ -71,6 +110,7 @@ def get_transfers(data: TransfersData):
         "altas": df_altas.to_dict(orient="records"),
         "bajas": df_bajas.to_dict(orient="records"),
     }
+
 
 @app.post("/api/transfers/revenue")
 def revenue(data: RevenueRequest):
@@ -90,6 +130,7 @@ def revenue(data: RevenueRequest):
         "total_income": float(total_income),
     }
 
+
 @app.post("/api/valuations")
 def get_player_valuation(data: PlayerValuationRequest):
     df_valuation = read_aws_csv(f"datasets/{data.club}/{data.season}/{data.club}_{data.season}_valuations.csv")
@@ -104,30 +145,8 @@ def get_player_valuation(data: PlayerValuationRequest):
 
     return result.to_dict(orient="records")
 
-# --- MODELOS Y UTILIDADES ---
 
-class TransfersData(BaseModel):
-    club: str
-    season: str
 
-class RevenueRequest(BaseModel):
-    club: str
-    season: str
-    transfer_budget: float
-
-class PlayerValuationRequest(BaseModel):
-    club: str
-    season: str
-    player: str
-
-def normalize(text: str) -> str:
-    if not isinstance(text, str):
-        return ""
-    text_nfkd = unicodedata.normalize("NFD", text)
-    without_accents = "".join(c for c in text_nfkd if unicodedata.category(c) != "Mn")
-    return without_accents.lower()
-
-# Endpoint para lanzar la ingesta de datos en segundo plano
 @app.post("/api/ingest/{club}/{season}")
 async def ingest_club_data(club: str, season: str, background_tasks: BackgroundTasks):
     background_tasks.add_task(ingest_data, club, season)
@@ -138,15 +157,6 @@ async def ingest_club_data(club: str, season: str, background_tasks: BackgroundT
 async def generate_summary(club: str, season: str):
     res = get_season_summary(club, season)
     return res
-
-class AgentMessage(BaseModel):
-    from_role: str
-    text: str
-
-
-class AgentRequest(BaseModel):
-    question: str
-    history: list[AgentMessage] | None = None
 
 
 """ @app.post("/api/agent")
@@ -198,20 +208,6 @@ async def simulate_strategy(club: str, season: str, transfer_budget: float, sala
         "ai_summary": "Simulador en mantenimiento."
     }
 
-
-class PlayerRequest(BaseModel):
-    name:str
-    club:str
-    season:str
-
-def normalize(text):
-    """Normaliza texto: quita acentos y pasa a minúsculas"""
-    if pd.isna(text) or text is None:
-        return ""
-    text_str = str(text)
-    text_nfkd = unicodedata.normalize("NFD", text_str)
-    without_accents = "".join(c for c in text_nfkd if unicodedata.category(c) != "Mn")
-    return without_accents.lower().strip()
 
 @app.post("/api/playerInfo")
 async def get_player_info(data: PlayerRequest):

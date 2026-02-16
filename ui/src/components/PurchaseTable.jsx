@@ -39,14 +39,14 @@ function PurchaseTable({ players = [], club, season }) {
                 </td>
               </tr>
             ) : (
-              players.map((p) => {
+              players.map((p,i) => {
                 const rawValue = p.valor ?? p.amount;
                 const hasValue = rawValue !== null && rawValue !== undefined && !isNaN(Number(rawValue)) && Number(rawValue) > 0;
                 const playerName = p['nombre y apellido'] || p.player_name || p['player name'] || '';
 
                 return (
                   <tr
-                    key={p.player_id || p.nombre || Math.random()}
+                    key={i}
                     onClick={() => handleRowClick(playerName)}
                     className="border-t border-[#111827] hover:bg-[#0a0e1f] hover:cursor-pointer"
                   >

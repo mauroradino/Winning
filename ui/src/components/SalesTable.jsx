@@ -28,13 +28,13 @@ function SalesTable({ players = [] }) {
                 </td>
               </tr>
             ) : (
-              players.map((p) => {
+              players.map((p, i) => {
                 const rawValue = p.valor ?? p.amount;
                 const hasValue = rawValue !== null && rawValue !== undefined && !isNaN(Number(rawValue)) && Number(rawValue) > 0;
 
                 return (
                   <tr
-                    key={p.player_id || p.nombre}
+                    key={i}
                     className="border-t border-[#111827] hover:bg-[#0a0e1f] hover:cursor-pointer"
                   >
                     <td className="px-4 py-3 text-gray-100">

@@ -28,7 +28,7 @@ const CustomSelect = ({ options, onSelect }) => {
               }}
               className="px-3 py-2 text-sm text-white cursor-pointer hover:bg-emerald-500 transition-colors"
             >
-              {option.toUpperCase()}
+              {option}
             </li>
           ))}
         </ul>

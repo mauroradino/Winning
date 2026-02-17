@@ -1,72 +1,70 @@
 # Winning Technical Challenge ⚽🤖
 
-Este proyecto es una solución integral para el **Winning Technical Challenge**. Combina un motor de extracción de datos de fútbol (Web Scraping) con una plataforma interactiva de simulación de transferencias potenciada por Inteligencia Artificial y arquitecturas RAG.
+Este proyecto es una solución para el **Winning Technical Challenge**. Combina un motor de extracción de datos de fútbol mediante Web Scraping con una plataforma interactiva de simulación de transferencias potenciada por Inteligencia Artificial.
 
 ## 🚀 Live Demo
-Podes probar la aplicación con este enlace: **[winning-black.vercel.app](https://winning-black.vercel.app/)** 
+Podes probar la aplicación en vivo en este enlace: **[winning-black.vercel.app](https://winning-black.vercel.app/)** 
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Stack Tecnológico 
 
 ### Frontend & UI
 * **React + Vite:** Para una interfaz reactiva, rápida y moderna.
 * **TailwindCSS:** Estilizado eficiente y diseño de interfaz profesional.
 
 ### Backend & Data Engine
-* **Python + BeautifulSoup:** Scraper robusto encargado de extraer datos estructurados de dominios deportivos.
-* **AWS S3:** Almacenamiento de los datasets extraídos en formato CSV.
+* **FastAPI (Python):** Framework asíncrono para la API de simulación y gestión de datos.
+* **Pandas:** Procesamiento y limpieza de grandes volúmenes de datos estructurados.
+* **AWS S3:** Persistencia de datasets en la nube (formatos CSV/JSON).
 
-### AI & Vector Intelligence
-* **Pinecone:** Base de datos vectorial utilizada para indexar los datos de los jugadores, permitiendo búsquedas semánticas y recuperación de contexto para la IA.
-* **LangChain:** Orquestador utilizado para implementar el `CSVLoader` y gestionar el flujo de datos.
-* **OpenAI SDK:** Motor de IA encargado de generar resúmenes estratégicos y análisis de profundidad de plantilla.
-
----
-
-## 🏗️ Arquitectura de Datos (RAG)
-El sistema sigue un flujo de **Generación Aumentada por Recuperación**:
-1. **Extracción:** El script en Python captura información de jugadores (edad, pie, nacionalidad), transferencias y valuaciones.
-2. **Persistencia:** Los datos se cargan en un bucket de **S3**.
-3. **Indexación:** LangChain procesa los archivos CSV y genera embeddings que se almacenan en **Pinecone**.
-4. **Simulación:** La IA consulta los vectores en Pinecone para ofrecer una respuesta precisa basada en el mercado real, el presupuesto de transferencias y el límite salarial ingresado.
+### AI & Vector Intelligence 
+* **Pinecone:** Base de datos vectorial para búsquedas semánticas y recuperación de contexto.
+* **LangChain:** Orquestador para el procesamiento de documentos y flujos RAG.
+* **OpenAI SDK:** Generación de resúmenes estratégicos y análisis de profundidad de plantilla.
 
 ---
 
-## 📋 Entregables del Desafío
+## 🏗️ Arquitectura y Lógica de Simulación
+La aplicación permite visualizar y simular resultados basados en:
+* **Inputs:** Club, Temporada, Presupuesto de Transferencias y Presupuesto Salarial.
+* **Simulación:** Lógica interactiva para compra/venta de jugadores, lista de plantilla actualizada y cambios en la valoración del equipo.
+* **Net Financial Benefit:** Cálculo automático del balance financiero tras cada movimiento.
 
-### 1. Data Integration & Web Scraping 
-* **Objetivo:** Extracción de datos de equipos y temporadas específicas.
-* **Entidades:** Jugadores, Clubes, Transferencias y Valuaciones.
-* **Desafíos:** Manejo de consistencia de datos y estructuras de dominios específicos.
-
-### 2. AI Transfer Simulator 
-* **Visualización:** Simulación de jugadores comprados/vendidos, lista de plantilla actual y cambios en la valoración neta.
-* **IA Component:** Generación de un resumen de texto de la temporada y generación de análisis de plantel asistido por LLMs.
-
-### 3.  🧠 Decisiones Técnicas & Desafíos
-## Desafíos de Scraping (Anti-Scraping & Inconsistencias)
-* **Renderizado Dinámico:** Se detectó que los datos salariales se inyectan vía JavaScript. Se migró de BeautifulSoup estático a **Selenium** para asegurar la hidratación completa del DOM antes de la extracción.
-* **Sanitización de Datos:** Se implementó una lógica de limpieza para manejar caracteres Unicode (como el em-dash `—`) y formatos numéricos complejos en las funciones de JavaScript de la fuente, garantizando que el pipeline hacia S3/Pinecone reciba datos limpios.
-* **Estructura Cambiante:** Se desarrolló un sistema de indexación dinámica de columnas por nombre de encabezado para manejar variaciones en las tablas entre diferentes temporadas.
-
-### Mejoras (Enhancements)
-* **Automatización Multiclub:** A diferencia de un scraper simple, el sistema procesa múltiples clubes y un rango de 6 temporadas (2020-2025) de forma automática mediante la configuración en `urls.json`.
-
-### Limitaciones y Trade-offs
-* **Dependencia de la Fuente:** El scraper es sensible a cambios estructurales mayores en el DOM de los sitios objetivo.
-* **Costo de Latencia:** El uso de un navegador headless (Selenium) aumenta el tiempo de recolección pero garantiza la fidelidad de los datos frente a métodos de request simples.
-
-## 🔑 Variables de Entorno
-Para ejecutar el backend (`api`) y la indexación, se requiere un archivo `.env` con:
-`OPENAI_API_KEY`, `PINECONE_API_KEY`, `PINECONE_ENV`, `AWS_ACCESS_KEY`, `AWS_SECRET_KEY`.
 ---
 
-## ⚙️ Instalación Local
+## 📋 Desafíos Técnicos y Soluciones (Challenges)
 
-```bash
-# 1. Clonar el repositorio
-git clone [https://github.com/mauroradino/Winning](https://github.com/mauroradino/Winning)
+Durante el desarrollo se enfrentaron y resolvieron los siguientes retos de ingeniería:
+
+### 1. Inconsistencias de Datos (Data Scraping)
+* **Sanitización de Nulos (NaN):** Se resolvió el error de serialización JSON (`ValueError: Out of range float values`) mediante una capa de limpieza con Pandas que convierte valores `NaN` en `null` antes de enviarlos a la UI.
+
+### 2. Integración y Arquitectura (Backend)
+* **Dependencias Circulares:** Se reestructuraron los módulos de la API (`aws_s3.py` e `index.py`) utilizando *deferred imports* para permitir que la normalización de datos y la persistencia en S3 funcionen de forma independiente.
+* **Normalización de Nombres:** Se implementó una función basada en `unicodedata` para manejar acentos y caracteres especiales (ej. "Julián Álvarez" vs "Julian Alvarez"), asegurando que las transferencias encuentren siempre el ID correcto del jugador.
+
+---
+
+## 🧠 Decisiones Técnicas (Technical Decisions) 
+
+* **Boto3 vs Local:** Se eligió AWS S3 para permitir que el scraper y la aplicación web compartan una fuente de verdad escalable y centralizada.
+* **Separación de Estados:** En el simulador, se separó el `montoDisplay` (formateado con puntos) del `monto` (numérico), optimizando la UX sin comprometer la precisión de los cálculos financieros.
+* **Modularidad:** Se optó por una estructura de paquetes con imports absolutos para que los notebooks de IA y el servidor de producción compartan la misma lógica de negocio.
+
+---
+
+## ⚠️ Limitaciones y Trade-offs 
+* **Persistencia Atómica:** La escritura en S3 es secuencial; interrupciones manuales durante la carga (`Ctrl+C`) pueden generar archivos parciales.
+* **Latencia de IA:** El tiempo de respuesta del resumen de temporada depende de la cuota y latencia del proveedor de LLM.
+
+---
+
+## ⚙️ Instalación Local 
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [https://github.com/mauroradino/Winning](https://github.com/mauroradino/Winning)
 
 # 2. Configurar el Frontend
 cd ui

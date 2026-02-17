@@ -33,7 +33,7 @@ function ButtonSection({club, seasonYear, player, loading, handleGetPlayers, han
             disabled={loading}
             className="px-4 py-2 rounded-lg text-sm font-medium bg-[#111827] hover:bg-[#1f2937] disabled:opacity-50"
           >
-            Simular Transferencias
+            Simular Calculos
           </button>
           <button
             onClick={() =>

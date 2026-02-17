@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import unicodedata
 from pathlib import Path
-from .aws_s3 import read_aws_csv
+from .aws_s3 import read_aws_csv, execute_s3_transfer
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_PATH = BASE_DIR / "datasets"
@@ -54,11 +54,6 @@ class RevenueRequest(BaseModel):
     season: str
     transfer_budget: float
 
-class PlayerValuationRequest(BaseModel):
-    club: str
-    season: str
-    player: str
-
 class AgentMessage(BaseModel):
     from_role: str
     text: str
@@ -71,6 +66,13 @@ class PlayerRequest(BaseModel):
     name:str
     club:str
     season:str 
+
+class SimulateTransferRequest(BaseModel):
+    player:str
+    season: str
+    from_club: str 
+    to_club: str
+    transfer_amount: int
 
 # --- UTILIDADES ---
 
@@ -98,16 +100,22 @@ async def get_squad(club: str, season: str):
 
 @app.post("/api/transfers")
 def get_transfers(data: TransfersData):
+    # 1. Intentamos leer los archivos de S3
     df_altas = read_aws_csv(f"datasets/{data.club}/{data.season}/{data.club}_{data.season}_altas.csv")
     df_bajas = read_aws_csv(f"datasets/{data.club}/{data.season}/{data.club}_{data.season}_bajas.csv")
 
-    for df in (df_altas, df_bajas):
-        for col in df.select_dtypes(include=["int64", "float64"]).columns:
-            df[col] = df[col].astype(float)
-    df.replace({float('nan'): None}, inplace=True)
+    # 2. Función de limpieza robusta
+    def sanitize_data(df):
+        if df is None or df.empty:
+            return []
+        # Reemplazamos NaN específicamente por None, que JSON traduce a null
+        # Usamos object para que acepte el None sin problemas de tipos
+        return df.astype(object).where(pd.notnull(df), None).to_dict(orient="records")
+
+    # 3. Retornamos la estructura original sanitizada
     return {
-        "altas": df_altas.to_dict(orient="records"),
-        "bajas": df_bajas.to_dict(orient="records"),
+        "altas": sanitize_data(df_altas),
+        "bajas": sanitize_data(df_bajas),
     }
 
 
@@ -157,55 +165,10 @@ async def generate_summary(club: str, season: str):
     res = get_season_summary(club, season)
     return res
 
-
-""" @app.post("/api/agent")
-async def query_agent(req: AgentRequest):
-    Endpoint principal del agente.
-    - Tiene memoria breve (history) que se usa como parte de la pregunta.
-    - Para preguntas del tipo '¿en qué club juega X?' usa lógica determinística con las valuaciones.
-    question = req.question.strip()
-    q_lower = question.lower()
-
-    # 1. Caso especial: club actual de un jugador (usando sólo CSV de valuaciones)
-    if "en que club juega" in q_lower or "en qué club juega" in q_lower or "club actual" in q_lower:
-        # Tomamos todo lo que viene después de 'juega' como nombre aproximado
-        if "juega" in q_lower:
-            idx = q_lower.rfind("juega")
-            raw_name = question[idx + len("juega") :].strip(" ?.,")
-        else:
-            raw_name = question.strip(" ?.,")
-
-        club_actual = get_player_current_club(raw_name)
-        if club_actual == "No encuentro esa información en los datos disponibles.":
-            return {"answer": club_actual}
-
-        return {"answer": f"{raw_name} juega actualmente en {club_actual}."}
-
-    # 2. Construimos una pregunta enriquecida con el historial (memoria de conversación)
-    history_text = ""
-    if req.history:
-        partes = []
-        for m in req.history:
-            rol = "Usuario" if m.from_role == "user" else "Agente"
-            partes.append(f"{rol}: {m.text}")
-        history_text = "\n".join(partes)
-
-    if history_text:
-        full_question = f"Historial de conversación:\n{history_text}\n\nPregunta actual: {question}"
-    else:
-        full_question = question
-
-    answer = query_rag(full_question)
-    return {"answer": answer}
- """
-
-@app.get("/api/simulate")
-async def simulate_strategy(club: str, season: str, transfer_budget: float, salary_budget: float):
-    return {
-        "club": club,
-        "net_financial_benefit": 0,
-        "ai_summary": "Simulador en mantenimiento."
-    }
+@app.post("/api/simulateTransfer")
+async def simulate_transfer(data: SimulateTransferRequest):
+    res = execute_s3_transfer(data.player, data.season, data.from_club, data.to_club,  data.transfer_amount)
+    return res
 
 
 @app.post("/api/playerInfo")

@@ -3,7 +3,7 @@
 Este proyecto es una solución integral para el **Winning Technical Challenge**. Combina un motor de extracción de datos de fútbol (Web Scraping) con una plataforma interactiva de simulación de transferencias potenciada por Inteligencia Artificial y arquitecturas RAG.
 
 ## 🚀 Live Demo
-Puedes probar la aplicación aquí: **[winning-black.vercel.app](https://winning-black.vercel.app/)** 
+Podes probar la aplicación con este enlace: **[winning-black.vercel.app](https://winning-black.vercel.app/)** 
 
 ---
 
@@ -42,8 +42,24 @@ El sistema sigue un flujo de **Generación Aumentada por Recuperación**:
 
 ### 2. AI Transfer Simulator 
 * **Visualización:** Simulación de jugadores comprados/vendidos, lista de plantilla actual y cambios en la valoración neta.
-* **IA Component:** Generación de un resumen de texto de la temporada asistido por LLMs.
+* **IA Component:** Generación de un resumen de texto de la temporada y generación de análisis de plantel asistido por LLMs.
 
+### 3.  🧠 Decisiones Técnicas & Desafíos
+## Desafíos de Scraping (Anti-Scraping & Inconsistencias)
+* **Renderizado Dinámico:** Se detectó que los datos salariales se inyectan vía JavaScript. Se migró de BeautifulSoup estático a **Selenium** para asegurar la hidratación completa del DOM antes de la extracción.
+* **Sanitización de Datos:** Se implementó una lógica de limpieza para manejar caracteres Unicode (como el em-dash `—`) y formatos numéricos complejos en las funciones de JavaScript de la fuente, garantizando que el pipeline hacia S3/Pinecone reciba datos limpios.
+* **Estructura Cambiante:** Se desarrolló un sistema de indexación dinámica de columnas por nombre de encabezado para manejar variaciones en las tablas entre diferentes temporadas.
+
+### Mejoras (Enhancements)
+* **Automatización Multiclub:** A diferencia de un scraper simple, el sistema procesa múltiples clubes y un rango de 6 temporadas (2020-2025) de forma automática mediante la configuración en `urls.json`.
+
+### Limitaciones y Trade-offs
+* **Dependencia de la Fuente:** El scraper es sensible a cambios estructurales mayores en el DOM de los sitios objetivo.
+* **Costo de Latencia:** El uso de un navegador headless (Selenium) aumenta el tiempo de recolección pero garantiza la fidelidad de los datos frente a métodos de request simples.
+
+## 🔑 Variables de Entorno
+Para ejecutar el backend (`api`) y la indexación, se requiere un archivo `.env` con:
+`OPENAI_API_KEY`, `PINECONE_API_KEY`, `PINECONE_ENV`, `AWS_ACCESS_KEY`, `AWS_SECRET_KEY`.
 ---
 
 ## ⚙️ Instalación Local

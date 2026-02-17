@@ -16,6 +16,7 @@ import SeasonSummary from './components/SeasonSummary'
 import ButtonSection from './components/ButtonSection'
 import InputSection from './components/InputSection'
 import SquadAnalysis from './components/SquadAnalysis'
+import TransferSimulator from './components/TransferSimulator'
 
 function HomePage() {
   const [club, setClub] = useState('')
@@ -181,6 +182,7 @@ function HomePage() {
               />
               <SalesTable players={soldPlayers} />
             </div>
+          <TransferSimulator/>
           <SeasonSummary club={club} season={temporada}/>
           <SquadAnalysis club={club} season={temporada} />
           </div>

@@ -71,7 +71,6 @@ function PlayerDetailsPage() {
       maximumFractionDigits: 0,
     }).format(value)
   }
-  console.log(playerData)
   if (loading) {
     return <LoadingState />
   }

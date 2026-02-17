@@ -6,6 +6,7 @@ from get_valuations import get_all_team_valuations
 from salaries_scrapper import get_salaries
 from .aws_s3 import upload_file
 import math 
+import time 
 
 with open("urls.json", "r") as f:
     urls = json.load(f)
@@ -15,13 +16,18 @@ def team_data(club: str, temporada: str):
 
     if players:
         df = pd.DataFrame(players)
-        if club == "boca juniors":
-            upload_file(df, f"datasets/{club}/{temporada}/{club}_{temporada}_players.csv")
-        else:
-            salarios = get_salaries(club, temporada)
-            complete_df = pd.merge(df, salarios, left_on="nombre y apellido", right_on="nombre")
+        
+        salarios = get_salaries(club, temporada)
+        if not salarios.empty:
+            salarios['sueldo_anual'] = pd.to_numeric(salarios['sueldo_anual'], errors='coerce').fillna(0)
+            complete_df = pd.merge(df, salarios, left_on="nombre y apellido", right_on="nombre", how='left')
             complete_df.drop(columns=["nombre"], inplace=True)
-            upload_file(complete_df, f"datasets/{club}/{temporada}/{club}_{temporada}_players.csv")
+            complete_df['sueldo_anual'] = complete_df['sueldo_anual'].fillna(0)
+        else:
+            df['sueldo_anual'] = 0
+            complete_df = df
+        
+        upload_file(complete_df, f"datasets/{club}/{temporada}/{club}_{temporada}_players.csv")
                     
         print(f"Datos de jugadores guardados en datasets/{club}/{temporada}/{club}_{temporada}_players.csv")
         total_valuations = get_all_team_valuations(players) 
@@ -44,11 +50,20 @@ def transfer_data(club: str, temporada: str):
         print(f"Transferencias guardadas en datasets/{club}/{temporada}")
 
 if __name__ == "__main__":
-    clubes = ["manchester city", "arsenal", "boca juniors"]
+    clubes = list(urls.keys())
     temporadas = ["2020", "2021", "2022", "2023", "2024", "2025"]
+    
     for club in clubes:
+        print(f"--- Procesando Club: {club.upper()} ---")
         for temporada in temporadas:
-            transfer_data(club, temporada)
-            team_data(club, temporada)
-    else:
-        print("Club no encontrado en urls.json")
+            try:
+                print(f"Extrayendo datos de {club} - Temporada {temporada}...")
+                transfer_data(club, temporada)
+                team_data(club, temporada)
+                time.sleep(2) 
+                
+            except Exception as e:
+                print(f"❌ Error procesando {club} en {temporada}: {e}")
+                continue 
+    
+    print("✅ Proceso de scraping finalizado para todos los clubes.")

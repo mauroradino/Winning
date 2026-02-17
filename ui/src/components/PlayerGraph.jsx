@@ -80,10 +80,9 @@ function PlayerGraph({ valuations, player }) {
     }
   }, [valuations, player])
 
-  // --- COMPONENTE DE ESTADO VACÍO CON EL MISMO WRAPPER ---
   if (!valuations || valuations.length === 0) {
     return (
-      <div className="lg:col-span-2"> {/* Mismo ancho que el gráfico original */}
+      <div className="lg:col-span-2"> 
         <div className="bg-[#0b1020] border border-[#1f2937] rounded-2xl p-6 h-full flex flex-col">
           <h2 className="text-lg font-semibold mb-4">Historial de Precio</h2>
           <div

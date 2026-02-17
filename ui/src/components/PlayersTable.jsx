@@ -20,10 +20,12 @@ function PlayersTable({ players = [], club, season }) {
   }
 
   const formatCurrency = (value) => {
-    if (!value || value === 0) return "$0"
+    if (!value || value === 0 || isNaN(value)) return "-"
+    const numValue = Number(value)
+    if (isNaN(numValue)) return "-"
     return "$" + new Intl.NumberFormat('es-AR', {
       maximumFractionDigits: 0,
-    }).format(value)
+    }).format(numValue)
   }
 
   return (
@@ -47,7 +49,7 @@ function PlayersTable({ players = [], club, season }) {
             <tr>
               <th className="px-4 py-3">Jugador</th>
               <th className="px-4 py-3">Posición</th>
-              <th className="px-4 py-3">Sueldo</th>
+              <th className="px-4 py-3">Sueldo Anual</th>
               <th className="px-4 py-3 text-right">Valor</th>
             </tr>
           </thead>
@@ -63,7 +65,7 @@ function PlayersTable({ players = [], club, season }) {
                 const rawValue = p.valor ?? p.amount;
                 const hasValue = rawValue !== null && rawValue !== undefined && !isNaN(Number(rawValue)) && Number(rawValue) > 0;
                 const playerName = p['nombre y apellido'] || p.player_name || p['player name'] || '';
-
+                const sueldoNormalizado = p.sueldo_anual ? String(p.sueldo_anual).replace('€', '').replace('£', '').replace('$', '').trim() : "0";
                 return (
                   <tr
                     key={p.player_id || p.nombre || Math.random()}
@@ -71,8 +73,8 @@ function PlayersTable({ players = [], club, season }) {
                     className="border-t border-[#111827] hover:bg-[#0a0e1f] hover:cursor-pointer"
                   >
                     <td className="px-4 py-3 text-gray-100">{playerName}</td>
-                    <td className="px-4 py-3 text-gray-300">{p.posicion || p.from_club || '-'}</td>
-                    <td className="px-4 py-3 text-gray-300">{formatCurrency(p.sueldo_anual) || '-'}</td>
+                    <td className="px-4 py-3 text-gray-300">{p.posicion || '-'}</td>
+                    <td className="px-4 py-3 text-gray-300">{formatCurrency(sueldoNormalizado)}</td>
                     <td className="px-4 py-3 text-right">
                       {hasValue ? (
                         <span className="text-emerald-400">

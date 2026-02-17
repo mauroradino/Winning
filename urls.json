@@ -12,9 +12,124 @@
         "salaries": "https://www.capology.com/club/arsenal/salaries/"
 
     },
-    "boca juniors":{
-        "players": "https://www.transfermarkt.es/ca-boca-juniors/kader/verein/189/plus/1/galerie/0?saison_id=",
-        "transfers": "https://www.transfermarkt.com.ar/ca-boca-juniors/transfers/verein/189/saison_id/",
-        "valuations": "https://www.transfermarkt.es/ca-boca-juniors/kader/verein/189/plus/0/galerie/0?saison_id="
+    "barcelona":{
+        "players": "https://www.transfermarkt.com.ar/fc-barcelona/kader/verein/131/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/fc-barcelona/transfers/verein/131/saison_id/",
+        "valuations": "https://www.transfermarkt.es/fc-barcelona/kader/verein/131/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/barcelona/salaries/"
+    },
+    "chelsea": {
+        "players": "https://www.transfermarkt.com.ar/fc-chelsea/kader/verein/631/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/fc-chelsea/transfers/verein/631/saison_id/",
+        "valuations": "https://www.transfermarkt.es/fc-chelsea/kader/verein/631/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/chelsea/salaries/"
+    }, 
+    "liverpool":{
+        "players": "https://www.transfermarkt.com.ar/fc-liverpool/kader/verein/31/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/fc-liverpool/transfers/verein/31/saison_id/",
+        "valuations": "https://www.transfermarkt.es/fc-liverpool/kader/verein/31/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/liverpool/salaries/"
+    },
+    "tottenham": {
+        "players": "https://www.transfermarkt.com.ar/tottenham-hotspur/kader/verein/148/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/tottenham-hotspur/transfers/verein/148/saison_id/",
+        "valuations": "https://www.transfermarkt.es/tottenham-hotspur/kader/verein/148/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/tottenham/salaries/"
+    },
+    "manchester united":{
+        "players": "https://www.transfermarkt.com.ar/manchester-united/kader/verein/985/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/manchester-united/transfers/verein/985/saison_id/",
+        "valuations": "https://www.transfermarkt.es/manchester-united/kader/verein/985/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/manchester-united/salaries/"
+    },
+    "newcastle united":{
+        "players": "https://www.transfermarkt.com.ar/newcastle-united/kader/verein/762/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/newcastle-united/transfers/verein/762/saison_id/",
+        "valuations": "https://www.transfermarkt.es/newcastle-united/kader/verein/762/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/newcastle/salaries/"
+    },
+    "nottingham forest":{
+        "players": "https://www.transfermarkt.com.ar/nottingham-forest/kader/verein/703/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/nottingham-forest/transfers/verein/703/saison_id/",
+        "valuations": "https://www.transfermarkt.es/nottingham-forest/kader/verein/703/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/nottingham-forest/salaries/"
+    },
+    "crystal palace":{
+        "players": "https://www.transfermarkt.com.ar/crystal-palace/kader/verein/873/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/crystal-palace/transfers/verein/873/saison_id/",
+        "valuations": "https://www.transfermarkt.es/crystal-palace/kader/verein/873/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/crystal-palace/salaries/"
+    },
+    "aston villa":{
+        "players": "https://www.transfermarkt.com.ar/aston-villa/kader/verein/405/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/aston-villa/transfers/verein/405/saison_id/",
+        "valuations": "https://www.transfermarkt.es/aston-villa/kader/verein/405/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/aston-villa/salaries/"
+    },
+    "brighton":{
+        "players": "https://www.transfermarkt.com.ar/brighton-amp-hove-albion/kader/verein/1237/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/brighton-amp-hove-albion/transfers/verein/1237/saison_id/",
+        "valuations": "https://www.transfermarkt.es/brighton-amp-hove-albion/kader/verein/1237/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/brighton/salaries/"
+    },
+    "bournemouth":{
+        "players": "https://www.transfermarkt.com.ar/afc-bournemouth/kader/verein/989/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/afc-bournemouth/transfers/verein/989/saison_id/",
+        "valuations": "https://www.transfermarkt.es/afc-bournemouth/kader/verein/989/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/bournemouth/salaries/"
+    },
+    "brentford":{
+        "players": "https://www.transfermarkt.com.ar/fc-brentford/kader/verein/1148/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/fc-brentford/transfers/verein/1148/saison_id/",
+        "valuations": "https://www.transfermarkt.es/fc-brentford/kader/verein/1148/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/brentford/salaries/"
+    },
+    "everton":{
+        "players": "https://www.transfermarkt.com.ar/fc-everton/kader/verein/29/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/fc-everton/transfers/verein/29/saison_id/",
+        "valuations": "https://www.transfermarkt.es/fc-everton/kader/verein/29/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/everton/salaries/"
+    },
+    "fulham":{
+        "players": "https://www.transfermarkt.com.ar/fc-fulham/kader/verein/931/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/fc-fulham/transfers/verein/931/saison_id/",
+        "valuations": "https://www.transfermarkt.es/fc-fulham/kader/verein/931/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/fulham/salaries/"
+    },
+    "west ham":{
+        "players": "https://www.transfermarkt.com.ar/west-ham-united/kader/verein/379/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/west-ham-united/transfers/verein/379/saison_id/",
+        "valuations": "https://www.transfermarkt.es/west-ham-united/kader/verein/379/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/west-ham/salaries/"
+    },
+    "sunderland":{
+        "players": "https://www.transfermarkt.com.ar/afc-sunderland/kader/verein/289/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/afc-sunderland/transfers/verein/289/saison_id/",
+        "valuations": "https://www.transfermarkt.es/afc-sunderland/kader/verein/289/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/sunderland/salaries/"
+    },
+    "leeds":{
+        "players": "https://www.transfermarkt.com.ar/leeds-united/kader/verein/399/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/leeds-united/transfers/verein/399/saison_id/",
+        "valuations": "https://www.transfermarkt.es/leeds-united/kader/verein/399/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/leeds/salaries/"
+    },
+    "wolverhampton":{
+        "players": "https://www.transfermarkt.com.ar/wolverhampton-wanderers/kader/verein/543/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/wolverhampton-wanderers/transfers/verein/543/saison_id/",
+        "valuations": "https://www.transfermarkt.es/wolverhampton-wanderers/kader/verein/543/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/wolverhampton/salaries/"
+    },
+    "burnley":{
+        "players": "https://www.transfermarkt.com.ar/fc-burnley/kader/verein/1132/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/fc-burnley/transfers/verein/1132/saison_id/",
+        "valuations": "https://www.transfermarkt.es/fc-burnley/kader/verein/1132/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/burnley/salaries/"
+    },
+    "real madrid":{
+        "players": "https://www.transfermarkt.com.ar/real-madrid/kader/verein/418/plus/1/galerie/0?saison_id=",
+        "transfers": "https://www.transfermarkt.com.ar/real-madrid/transfers/verein/418/saison_id/",
+        "valuations": "https://www.transfermarkt.es/real-madrid/kader/verein/418/plus/0/galerie/0?saison_id=",
+        "salaries": "https://www.capology.com/club/real-madrid/salaries/"
     }
 }

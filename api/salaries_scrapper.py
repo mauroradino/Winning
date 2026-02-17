@@ -29,20 +29,15 @@ def get_salaries(club: str, temporada: str):
         time.sleep(2)
 
         soup = BeautifulSoup(driver.page_source, 'html.parser')
-        
-        # 1. Encontrar el índice de la columna "Gross P/Y" dinámicamente
         header_row = soup.find('table', id='table').find('thead').find_all('tr')[-1]
         headers = [th.get_text(strip=True) for th in header_row.find_all('th')]
         
-        # Buscamos la columna que diga "Gross P/Y" (Sueldo anual bruto)
         try:
-            # En la Premier suele decir "Gross P/Y (GBP)"
             target_col_index = next(i for i, h in enumerate(headers) if "Gross P/Y" in h)
         except StopIteration:
             print("❌ No se encontró la columna de sueldo anual.")
             return pd.DataFrame()
 
-        # 2. Extraer los datos usando el índice dinámico
         rows = soup.find('table', id='table').find('tbody').find_all('tr')
         players_data = []
         
@@ -51,7 +46,6 @@ def get_salaries(club: str, temporada: str):
             if len(cols) > target_col_index:
                 players_data.append({
                     "nombre": cols[0].get_text(strip=True),
-                    # Usamos el índice que encontramos dinámicamente
                     "sueldo_anual": cols[target_col_index].get_text(strip=True).replace('£', '').replace(',', '').replace(' ', ''),
                 })
 

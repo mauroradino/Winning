@@ -66,12 +66,14 @@ Durante el desarrollo se enfrentaron y resolvieron los siguientes retos de ingen
    ```bash
    git clone [https://github.com/mauroradino/Winning](https://github.com/mauroradino/Winning)
 
-# 2. Configurar el Frontend
-cd ui
-npm install
-npm run dev
+2. **Configurar el Frontend**
+    ```bash
+    cd ui
+    npm install
+    npm run dev
 
-# 3. Ejecutar el Scraper (Python) [No necesario para la utilización del proyecto]
-cd api
-pip install -r requirements.txt
-python main.py
+3. **Ejecutar el Scraper (Python) [No necesario para la utilización del proyecto]**
+    ```bash
+    cd api
+    pip install -r requirements.txt
+    python main.py

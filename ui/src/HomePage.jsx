@@ -187,14 +187,6 @@ function HomePage() {
           <SquadAnalysis club={club} season={temporada} />
           </div>
         </div>
-        {data && (
-          <div className="bg-[#020617] border border-[#1f2937] rounded-xl p-4 mt-4 text-xs text-gray-300">
-            <h3 className="font-semibold mb-2">Datos crudos (debug)</h3>
-            <pre className="whitespace-pre-wrap break-all">
-              {JSON.stringify(data, null, 2)}
-            </pre>
-          </div>
-        )}
       </div>
     </div>
   )

@@ -63,7 +63,7 @@ function SquadAnalysis({club, season, loading}){
       <div className="px-4 py-3 border-b border-[#1f2937] flex items-center justify-between">
         <h2 className="text-sm font-semibold text-gray-100">ANALISIS DE PLANTEL GENERADO POR IA</h2>
         {isGenerating ? (
-          <p className="text-emerald-500 text-sm font-medium animate-pulse">Generando Resumen...</p>
+          <p className="text-emerald-500 text-sm font-medium animate-pulse">Generando Analisis...</p>
         ) : loading ? (
           <p className="text-gray-400 text-sm">Cargando Datos...</p>
         ) : null}
@@ -72,7 +72,7 @@ function SquadAnalysis({club, season, loading}){
           disabled={isGenerating || !club || !season}
           className="px-4 py-2 rounded-lg text-sm font-medium bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {isGenerating ? "Procesando..." : "Generar Resumen"}
+          {isGenerating ? "Procesando..." : "Generar Analisis"}
         </button>
       </div>
       {content && <MarkdownReport content={content}/>}

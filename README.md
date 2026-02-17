@@ -60,6 +60,41 @@ Durante el desarrollo se enfrentaron y resolvieron los siguientes retos de ingen
 
 ---
 
+## Variables de Entonrno
+* En el archivo example.env podes encontrar las variables de entorno necesarias para ejecutar el proyecto
+
+## Esquemas de datos
+* **Jugadores:**
+     "player_id": int,
+     "número": int,
+     "nombre y apellido": str,
+     "posicion": str,
+     "edad": int,
+     "fecha de nacimiento": str,
+     "pie": str,
+     "pais de orígen": str,
+     "altura": int,
+     "valor": int,
+     "club anterior": str,
+     "sueldo_anual": str
+
+* **Valuaciones:**
+    valuation_amount: int 
+    valuation_date:str
+    
+* **Transferencias:**
+    altas:
+        amount: str 
+        from_club:str 
+        player_id: int
+        player_name:str
+    
+    bajas:
+        amount: str 
+        from_club:str 
+        player_id: int
+        player_name:str
+
 ## ⚙️ Instalación Local 
 
 1. **Clonar el repositorio:**
